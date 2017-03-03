@@ -1,0 +1,6 @@
+framework module Pods_eTrips {
+  umbrella header "Pods-eTrips-umbrella.h"
+
+  export *
+  module * { export * }
+}

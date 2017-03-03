@@ -1,0 +1,6 @@
+framework module SwiftPaginator {
+  umbrella header "SwiftPaginator-umbrella.h"
+
+  export *
+  module * { export * }
+}

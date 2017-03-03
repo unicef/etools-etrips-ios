@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16D32" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ActionPointEntity" representedClassName=".ActionPointEntity" parentEntity="RemovableEntity" syncable="YES">
+        <attribute name="actionPointNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="actionsTaken" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="assignedByName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="assignedByPersonID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="comments" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="completedAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="dueDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="followUp" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="personResponsibleID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="personResponsibleName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="pointDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="pointID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tripID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="tripReferenceNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TripEntity" inverseName="actionPoints" inverseEntity="TripEntity" syncable="YES"/>
+    </entity>
+    <entity name="CostAssignmentEntity" representedClassName=".CostAssignmentEntity" parentEntity="RemovableEntity" syncable="YES">
+        <attribute name="costAssignmentID" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="fundID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="grantID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="share" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="wbsID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TripEntity" inverseName="costAssignments" inverseEntity="TripEntity" syncable="YES"/>
+    </entity>
+    <entity name="CostSummaryEntity" representedClassName=".CostSummaryEntity" syncable="YES">
+        <attribute name="deductionsTotal" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dsaTotal" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="expensesTotal" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="trip" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="TripEntity" inverseName="costSummary" inverseEntity="TripEntity" syncable="YES"/>
+    </entity>
+    <entity name="CurrencyEntity" representedClassName=".CurrencyEntity" syncable="YES">
+        <attribute name="code" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="currencyID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="exchangeToDollar" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="iso4127" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="data" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StaticDataEntity" inverseName="currencies" inverseEntity="StaticDataEntity" syncable="YES"/>
+    </entity>
+    <entity name="FileEntity" representedClassName=".FileEntity" parentEntity="RemovableEntity" syncable="YES">
+        <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fileID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="fileURL" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TripEntity" inverseName="files" inverseEntity="TripEntity" syncable="YES"/>
+    </entity>
+    <entity name="FundEntity" representedClassName=".FundEntity" syncable="YES">
+        <attribute name="fundID" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <relationship name="data" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="StaticDataEntity" inverseName="funds" inverseEntity="StaticDataEntity" syncable="YES"/>
+    </entity>
+    <entity name="GrantEntity" representedClassName=".GrantEntity" syncable="YES">
+        <attribute name="grantID" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <relationship name="data" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StaticDataEntity" inverseName="grants" inverseEntity="StaticDataEntity" syncable="YES"/>
+    </entity>
+    <entity name="LocalFileEntity" representedClassName=".LocalFileEntity" syncable="YES">
+        <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fileID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="fileURL" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tripID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TripEntity" inverseName="localFiles" inverseEntity="TripEntity" syncable="YES"/>
+    </entity>
+    <entity name="LocalReportEntity" representedClassName=".LocalReportEntity" parentEntity="RemovableEntity" syncable="YES">
+        <attribute name="report" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tripID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TripEntity" inverseName="localReport" inverseEntity="TripEntity" syncable="YES"/>
+    </entity>
+    <entity name="PartnerEntity" representedClassName=".PartnerEntity" syncable="YES">
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="partnerID" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="data" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StaticDataT2FEntity" inverseName="partners" inverseEntity="StaticDataT2FEntity" syncable="YES"/>
+    </entity>
+    <entity name="PartnershipEntity" representedClassName=".PartnershipEntity" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="partnershipID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="data" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StaticDataT2FEntity" inverseName="partnerships" inverseEntity="StaticDataT2FEntity" syncable="YES"/>
+    </entity>
+    <entity name="ProfileEntity" representedClassName=".ProfileEntity" parentEntity="RemovableEntity" syncable="YES">
+        <attribute name="country" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" attributeType="String" syncable="YES"/>
+        <attribute name="jobTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastName" attributeType="String" syncable="YES"/>
+        <attribute name="office" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="profileID" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="profileID"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="RemovableEntity" representedClassName="" isAbstract="YES" syncable="YES"/>
+    <entity name="StaticDataEntity" representedClassName=".StaticDataEntity" parentEntity="RemovableEntity" syncable="YES">
+        <relationship name="currencies" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="CurrencyEntity" inverseName="data" inverseEntity="CurrencyEntity" syncable="YES"/>
+        <relationship name="funds" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="FundEntity" inverseName="data" inverseEntity="FundEntity" syncable="YES"/>
+        <relationship name="grants" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="GrantEntity" inverseName="data" inverseEntity="GrantEntity" syncable="YES"/>
+        <relationship name="wbs" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="WBSEntity" inverseName="data" inverseEntity="WBSEntity" syncable="YES"/>
+    </entity>
+    <entity name="StaticDataT2FEntity" representedClassName=".StaticDataT2FEntity" parentEntity="RemovableEntity" syncable="YES">
+        <relationship name="partners" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="PartnerEntity" inverseName="data" inverseEntity="PartnerEntity" syncable="YES"/>
+        <relationship name="partnerships" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="PartnershipEntity" inverseName="data" inverseEntity="PartnershipEntity" syncable="YES"/>
+    </entity>
+    <entity name="TravelActivityEntity" representedClassName=".TravelActivityEntity" syncable="YES">
+        <attribute name="activityID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="isPrimaryTraveler" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="partnerID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="partnershipID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="travelType" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TripEntity" inverseName="travelActivities" inverseEntity="TripEntity" syncable="YES"/>
+    </entity>
+    <entity name="TravelItineraryEntity" representedClassName=".TravelItineraryEntity" parentEntity="RemovableEntity" syncable="YES">
+        <attribute name="arrive" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="depart" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="destination" attributeType="String" syncable="YES"/>
+        <attribute name="modeOfTravel" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="origin" attributeType="String" syncable="YES"/>
+        <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TripEntity" inverseName="travelItinerary" inverseEntity="TripEntity" syncable="YES"/>
+    </entity>
+    <entity name="TripEntity" representedClassName=".TripEntity" parentEntity="RemovableEntity" syncable="YES">
+        <attribute name="createdDate" optional="YES" attributeType="Date" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
+        <attribute name="currencyID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="endDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="lastModified" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="purposeOfTravel" attributeType="String" syncable="YES"/>
+        <attribute name="referenceNumber" attributeType="String" syncable="YES"/>
+        <attribute name="rejectionNote" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="report" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="startDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="status" attributeType="String" syncable="YES"/>
+        <attribute name="supervisorID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="supervisorName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="travelerName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tripID" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="typeValue" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="actionPoints" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="ActionPointEntity" inverseName="trip" inverseEntity="ActionPointEntity" syncable="YES"/>
+        <relationship name="costAssignments" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="CostAssignmentEntity" inverseName="trip" inverseEntity="CostAssignmentEntity" syncable="YES"/>
+        <relationship name="costSummary" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CostSummaryEntity" inverseName="trip" inverseEntity="CostSummaryEntity" syncable="YES"/>
+        <relationship name="files" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="FileEntity" inverseName="trip" inverseEntity="FileEntity" syncable="YES"/>
+        <relationship name="localFiles" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="LocalFileEntity" inverseName="trip" inverseEntity="LocalFileEntity" syncable="YES"/>
+        <relationship name="localReport" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LocalReportEntity" inverseName="trip" inverseEntity="LocalReportEntity" syncable="YES"/>
+        <relationship name="travelActivities" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="TravelActivityEntity" inverseName="trip" inverseEntity="TravelActivityEntity" syncable="YES"/>
+        <relationship name="travelItinerary" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="TravelItineraryEntity" inverseName="trip" inverseEntity="TravelItineraryEntity" syncable="YES"/>
+    </entity>
+    <entity name="UserEntity" representedClassName=".UserEntity" parentEntity="RemovableEntity" syncable="YES">
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fullName" attributeType="String" syncable="YES"/>
+        <attribute name="userID" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="username" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="WBSEntity" representedClassName=".WBSEntity" syncable="YES">
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="wbsID" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="data" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StaticDataEntity" inverseName="wbs" inverseEntity="StaticDataEntity" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="ActionPointEntity" positionX="-15743" positionY="-6346" width="128" height="300"/>
+        <element name="CostAssignmentEntity" positionX="-15338" positionY="-6768" width="128" height="133"/>
+        <element name="CostSummaryEntity" positionX="-15149" positionY="-6655" width="128" height="103"/>
+        <element name="CurrencyEntity" positionX="-16254" positionY="-6208" width="128" height="133"/>
+        <element name="FileEntity" positionX="-15752" positionY="-6520" width="128" height="103"/>
+        <element name="FundEntity" positionX="-15941" positionY="-6232" width="128" height="90"/>
+        <element name="GrantEntity" positionX="-16092" positionY="-6363" width="128" height="90"/>
+        <element name="LocalFileEntity" positionX="-15570" positionY="-6070" width="128" height="118"/>
+        <element name="LocalReportEntity" positionX="-15356" positionY="-6102" width="128" height="88"/>
+        <element name="PartnerEntity" positionX="-16299" positionY="-6676" width="128" height="88"/>
+        <element name="PartnershipEntity" positionX="-16067" positionY="-6741" width="128" height="88"/>
+        <element name="ProfileEntity" positionX="-15860" positionY="-6718" width="146" height="148"/>
+        <element name="RemovableEntity" positionX="-15543" positionY="-6957" width="128" height="45"/>
+        <element name="StaticDataEntity" positionX="-16101" positionY="-6586" width="128" height="103"/>
+        <element name="StaticDataT2FEntity" positionX="-16265" positionY="-6822" width="128" height="73"/>
+        <element name="TravelActivityEntity" positionX="-15365" positionY="-6300" width="128" height="133"/>
+        <element name="TravelItineraryEntity" positionX="-15138" positionY="-6417" width="128" height="135"/>
+        <element name="TripEntity" positionX="-15527" positionY="-6666" width="128" height="388"/>
+        <element name="UserEntity" positionX="-15858" positionY="-6876" width="128" height="105"/>
+        <element name="WBSEntity" positionX="-16301" positionY="-6354" width="128" height="88"/>
+    </elements>
+</model>

@@ -13,6 +13,7 @@ class LoginViewController: UIViewController {
 
 	/// Services.
 	var loginService: LoginService = LoginService()
+	var loginSOAPService: LoginSOAPService = LoginSOAPService()
 	var profileService: ProfileService = ProfileService()
 	var staticDataService: StaticDataService = StaticDataService()
 	var staticDataT2FService: StaticDataT2FService = StaticDataT2FService()
@@ -72,69 +73,12 @@ class LoginViewController: UIViewController {
 
 		ProgressHUD.shared.show()
 		view.endEditing(true)
-
-		loginService.login(username, password) { success, error in
-
-			if !success {
-				ProgressHUD.shared.dismiss()
-			}
-
-			if let error = error {
-				let alert = UIAlertController(title: error.title,
-				                              message: error.detail,
-				                              preferredStyle: .alert)
-				let okAction = UIAlertAction(title: "OK",
-				                             style: .cancel, handler: nil)
-
-				alert.addAction(okAction)
-				self.present(alert, animated: true, completion: nil)
-				return
-			}
-
-			if success {
-				let downloadGroup = DispatchGroup()
-
-				var profileSuccess = false
-				var staticDataSuccess = false
-				var staticDataT2FSuccess = false
-				var usersSuccess = false
-
-				downloadGroup.enter()
-				// 1. Download Profile.
-				self.profileService.downloadProfile { success in
-					profileSuccess = success
-					downloadGroup.leave()
-				}
-
-				// 2. Download static data 1.
-				downloadGroup.enter()
-				self.staticDataService.downloadStaticData { success, _ in
-					staticDataSuccess = success
-					downloadGroup.leave()
-				}
-
-				// 3. Download static data 2.
-				downloadGroup.enter()
-				self.staticDataT2FService.downloadStaticDataT2F { success, _ in
-					staticDataT2FSuccess = success
-					downloadGroup.leave()
-				}
-
-				// 4. Download list of users.
-				downloadGroup.enter()
-				self.usersService.downloadUsers { success in
-					usersSuccess = success
-					downloadGroup.leave()
-				}
-
-				downloadGroup.notify(queue: DispatchQueue.main) {
-					ProgressHUD.shared.dismiss()
-					if profileSuccess && staticDataSuccess && staticDataT2FSuccess && usersSuccess {
-						self.transitionToTabBar()
-					}
-				}
-			}
-		}
+		
+		#if PRODUCTION || RELEASE
+			self.loginSOAP(username: username, password: password)
+		#else
+			self.login(username: username, password: password)
+		#endif
 	}
 
 	@IBAction func languageButtonAction(_: UIButton) {
@@ -145,7 +89,99 @@ class LoginViewController: UIViewController {
 		view.endEditing(true)
 	}
 
-	// MARK: - Private
+	// MARK: - Methods
+	func loginSOAP(username: String, password: String) {
+		loginSOAPService.login(username, password) { success, error in
+
+			if let error = error {
+				ProgressHUD.shared.dismiss()
+				let alert = UIAlertController(title: error.title,
+											  message: error.detail,
+											  preferredStyle: .alert)
+				let okAction = UIAlertAction(title: "OK",
+											 style: .cancel, handler: nil)
+				alert.addAction(okAction)
+				self.present(alert, animated: true, completion: nil)
+				return
+			}
+
+			if success {
+				self.loadData()
+			} else {
+				ProgressHUD.shared.dismiss()
+			}
+		}
+	}
+	
+	func login(username: String, password: String) {
+		loginService.login(username, password) { success, error in
+
+			if let error = error {
+				ProgressHUD.shared.dismiss()
+				let alert = UIAlertController(title: error.title,
+											  message: error.detail,
+											  preferredStyle: .alert)
+				let okAction = UIAlertAction(title: "OK",
+											 style: .cancel, handler: nil)
+
+				alert.addAction(okAction)
+				self.present(alert, animated: true, completion: nil)
+				return
+			}
+
+			if success {
+				self.loadData()
+			} else {
+				ProgressHUD.shared.dismiss()
+			}
+		}
+	}
+	
+	func loadData() {
+		let downloadGroup = DispatchGroup()
+
+		var profileSuccess = false
+		var staticDataSuccess = false
+		var staticDataT2FSuccess = false
+		var usersSuccess = false
+
+		downloadGroup.enter()
+		// 1. Download Profile.
+		self.profileService.downloadProfile { success in
+			profileSuccess = success
+			downloadGroup.leave()
+		}
+
+		// 2. Download static data 1.
+		downloadGroup.enter()
+		self.staticDataService.downloadStaticData { success, _ in
+			staticDataSuccess = success
+			downloadGroup.leave()
+		}
+
+		// 3. Download static data 2.
+		downloadGroup.enter()
+		self.staticDataT2FService.downloadStaticDataT2F { success, _ in
+			staticDataT2FSuccess = success
+			downloadGroup.leave()
+		}
+
+		// 4. Download list of users.
+		downloadGroup.enter()
+		self.usersService.downloadUsers { success in
+			usersSuccess = success
+			downloadGroup.leave()
+		}
+
+		downloadGroup.notify(queue: DispatchQueue.main) {
+			ProgressHUD.shared.dismiss()
+			if profileSuccess && staticDataSuccess && staticDataT2FSuccess && usersSuccess {
+				self.transitionToTabBar()
+			}
+		}
+
+	}
+
 	func registerForKeyboardNotifications() {
 		NotificationCenter.default.addObserver(self, selector:
 			#selector(keyboardWasShown),

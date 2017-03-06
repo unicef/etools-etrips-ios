@@ -25,6 +25,7 @@
 		84116F351E55DD8A00917D10 /* LocalReportEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84116F341E55DD8A00917D10 /* LocalReportEntity.swift */; };
 		84116F371E55EF5B00917D10 /* LocalFileEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84116F361E55EF5B00917D10 /* LocalFileEntity.swift */; };
 		8415A0B61E37719F0025F55A /* NSManagedObjectContext+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8415A0B51E37719F0025F55A /* NSManagedObjectContext+Extensions.swift */; };
+		841670681E6D4B6A0081D980 /* LoginSOAPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841670671E6D4B6A0081D980 /* LoginSOAPService.swift */; };
 		84207CA11E546393001B7039 /* TransitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84207CA01E546393001B7039 /* TransitionService.swift */; };
 		84209EBB1E699E4A00E8699F /* TripInfoTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84209EBA1E699E4A00E8699F /* TripInfoTableViewDataSource.swift */; };
 		84257BB51E4A025900D75C68 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84257BB41E4A025900D75C68 /* String.swift */; };
@@ -167,6 +168,7 @@
 		84116F341E55DD8A00917D10 /* LocalReportEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalReportEntity.swift; sourceTree = "<group>"; };
 		84116F361E55EF5B00917D10 /* LocalFileEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalFileEntity.swift; sourceTree = "<group>"; };
 		8415A0B51E37719F0025F55A /* NSManagedObjectContext+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+Extensions.swift"; sourceTree = "<group>"; };
+		841670671E6D4B6A0081D980 /* LoginSOAPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginSOAPService.swift; sourceTree = "<group>"; };
 		84207CA01E546393001B7039 /* TransitionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionService.swift; sourceTree = "<group>"; };
 		84209EBA1E699E4A00E8699F /* TripInfoTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripInfoTableViewDataSource.swift; sourceTree = "<group>"; };
 		84257BB41E4A025900D75C68 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -382,6 +384,14 @@
 				84116F341E55DD8A00917D10 /* LocalReportEntity.swift */,
 			);
 			path = LocalReport;
+			sourceTree = "<group>";
+		};
+		841670661E6D4B5E0081D980 /* LoginProductionService */ = {
+			isa = PBXGroup;
+			children = (
+				841670671E6D4B6A0081D980 /* LoginSOAPService.swift */,
+			);
+			path = LoginProductionService;
 			sourceTree = "<group>";
 		};
 		84207C9F1E546387001B7039 /* TransitionService */ = {
@@ -812,6 +822,7 @@
 		848493591E30A5C50050409A /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				841670661E6D4B5E0081D980 /* LoginProductionService */,
 				84207C9F1E546387001B7039 /* TransitionService */,
 				845664591E51AD26006B8751 /* StaticDataService */,
 				3F80521F1E51B6D80011679A /* ActionPointsService */,
@@ -1448,6 +1459,7 @@
 				84F8A8951E532A6C00EB66A7 /* CostSummary.swift in Sources */,
 				8443F9021E2F998C001196EF /* Trip.swift in Sources */,
 				84989EBA1E30F54E00D8D57F /* Profile.swift in Sources */,
+				841670681E6D4B6A0081D980 /* LoginSOAPService.swift in Sources */,
 				84257BB51E4A025900D75C68 /* String.swift in Sources */,
 				845664691E51C64A006B8751 /* StaticDataEntity.swift in Sources */,
 				84F8A8841E52F15100EB66A7 /* Partnership.swift in Sources */,
@@ -1665,6 +1677,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = STAGING;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1730,6 +1743,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = PRODUCTION;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1845,6 +1859,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = RELEASE;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1862,7 +1877,7 @@
 				INFOPLIST_FILE = eTrips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-D\" \"DEBUG\"";
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
 				PRODUCT_BUNDLE_IDENTIFIER = org.unicef.etools.etrips.debug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "c0192fe1-8f0e-405c-881a-79c68a74a388";

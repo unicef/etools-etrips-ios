@@ -42,7 +42,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	// MARK: - Helpers
 	func setupHockeySDK() {
 		// Hockey SDK With Production identifier
-		BITHockeyManager.shared().configure(withIdentifier: "f847e4be96d24933bf6067e3399a982e")
+		
+		#if PRODUCTION || RELEASE
+			BITHockeyManager.shared().configure(withIdentifier: "b8c800962c0f45a7956f43137f756a76")
+		#else
+			BITHockeyManager.shared().configure(withIdentifier: "78445491ff6b41218e9d9ad489f658a2")
+		#endif
+		
 		BITHockeyManager.shared().start()
 		BITHockeyManager.shared().authenticator.authenticateInstallation()
 	}

@@ -13,11 +13,25 @@ public final class TravelItineraryEntity: ManagedObject {
 	public static func insert(into context: NSManagedObjectContext, object: TravelItinerary) -> TravelItineraryEntity {
 		let travelItinerary: TravelItineraryEntity = context.insertObject()
 		
-		travelItinerary.origin = object.origin!
-		travelItinerary.destination = object.destination!
-		travelItinerary.depart = object.departureDate!
-		travelItinerary.arrive = object.arrivalDate!
-		travelItinerary.modeOfTravel = object.modeOfTravel!
+		if let origin = object.origin {
+			travelItinerary.origin = origin
+		}
+		
+		if let destination = object.destination {
+			travelItinerary.destination = destination
+		}
+		
+		if let depart = object.departureDate {
+			travelItinerary.depart = depart
+		}
+		
+		if let arrive = object.arrivalDate {
+			travelItinerary.arrive = arrive
+		}
+
+		if let modeOfTravel = object.modeOfTravel {
+			travelItinerary.modeOfTravel = modeOfTravel
+		}
 		
 		return travelItinerary
 	}

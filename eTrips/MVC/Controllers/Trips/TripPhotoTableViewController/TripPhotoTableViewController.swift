@@ -3,11 +3,9 @@ import SKPhotoBrowser
 
 class TripPhotoTableViewController: UITableViewController {
 	public var image: UIImage?
-	public var fileEntity: FileEntity?
-	public var localFileEntity: LocalFileEntity?
 
 	public var tripEntity: TripEntity!
-	fileprivate var caption: String?
+	public var caption: String?
 
 	fileprivate enum SectionType {
 		case photoSection
@@ -67,7 +65,6 @@ class TripPhotoTableViewController: UITableViewController {
 			var compression: CGFloat = 1.0
 			while compression >= 0.0 {
 				if let imageData = UIImageJPEGRepresentation(image, compression) {
-					print("SIZE: \(imageData.count / 1000) KB")
 					if imageData.count < 1000000 {
 						break
 					}
@@ -105,10 +102,10 @@ class TripPhotoTableViewController: UITableViewController {
 	// MARK: - Methods
 	private func setupNavigationBar() {
 
-		if image != nil {
-			title = "Add Photo"
-		} else {
+		if caption != nil {
 			title = "Photo"
+		} else {
+			title = "Add Photo"
 		}
 
 		// Cancel button.
@@ -127,12 +124,14 @@ class TripPhotoTableViewController: UITableViewController {
 			                target: self,
 			                action: #selector(TripPhotoTableViewController.saveBarButtonItemAction))
 
-		navigationItem.leftBarButtonItem = cancelBarButtonItem
-
-		if image != nil {
-			navigationItem.rightBarButtonItem = saveBarButtonItem
-		} else {
+		if caption != nil {
+			cancelBarButtonItem.title = "Close"
 			navigationItem.rightBarButtonItem = nil
+			navigationItem.leftBarButtonItem = cancelBarButtonItem
+		} else {
+			navigationItem.rightBarButtonItem = saveBarButtonItem
+			navigationItem.leftBarButtonItem = cancelBarButtonItem
+
 		}
 	}
 
@@ -178,10 +177,6 @@ extension TripPhotoTableViewController {
 
 			if let image = image {
 				cell.configure(photo: image)
-			} else if let fileEntity = fileEntity {
-				cell.configure(stringURL: fileEntity.fileURL)
-			} else if let localFileEntity = localFileEntity {
-				cell.configure(stringURL: localFileEntity.fileURL)
 			}
 
 			return cell
@@ -192,16 +187,13 @@ extension TripPhotoTableViewController {
 				fatalError()
 			}
 
-			if let _ = image {
+			if caption != nil {
+				cell.configure(with: caption, delegate: self)
+				cell.captionTextView.isEditable = false
+			} else {
 				cell.configure(with: "", delegate: self)
 				cell.captionTextView.isEditable = true
 				cell.captionTextView.becomeFirstResponder()
-			} else if let fileEntity = fileEntity {
-				cell.configure(with: fileEntity.caption, delegate: self)
-				cell.captionTextView.isEditable = false
-			} else if let localFileEntity = localFileEntity {
-				cell.configure(with: localFileEntity.caption, delegate: self)
-				cell.captionTextView.isEditable = false
 			}
 
 			return cell
@@ -213,10 +205,10 @@ extension TripPhotoTableViewController {
 
 		switch section {
 		case .captionSection:
-			if image != nil {
-				return "You can’t add photo without description"
-			} else {
+			if tripEntity.isReportSubmitted {
 				return nil
+			} else {
+				return "You can’t add photo without description"
 			}
 
 		default:
@@ -239,22 +231,19 @@ extension TripPhotoTableViewController {
 		}
 	}
 
-	override func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		let section = sections[indexPath.section]
 		let row = section.rows[indexPath.row]
 
 		switch row {
 		case .photoRow:
+			// Deselect text.
+			self.view.endEditing(true)
+
 			var images = [SKPhoto]()
 
 			if let image = image {
 				let photo = SKPhoto.photoWithImage(image)
-				images.append(photo)
-			} else if let fileEntity = fileEntity {
-				let photo = SKPhoto.photoWithImageURL(fileEntity.fileURL)
-				images.append(photo)
-			} else if let localFileEntity = localFileEntity {
-				let photo = SKPhoto.photoWithImageURL(localFileEntity.fileURL)
 				images.append(photo)
 			}
 

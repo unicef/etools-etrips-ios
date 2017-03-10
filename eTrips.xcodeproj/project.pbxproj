@@ -109,6 +109,7 @@
 		84AD582C1E680CD10002E627 /* NetworkConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AD582B1E680CD10002E627 /* NetworkConnection.swift */; };
 		84AD582F1E68485C0002E627 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AD582E1E68485C0002E627 /* Currency.swift */; };
 		84AD58311E68486E0002E627 /* CurrencyEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AD58301E68486E0002E627 /* CurrencyEntity.swift */; };
+		84B114FE1E71814B002DB686 /* DefaultAlamofireManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B114FD1E71814B002DB686 /* DefaultAlamofireManager.swift */; };
 		84B2383B1E5ADFA000830C11 /* TripsBaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B2383A1E5ADFA000830C11 /* TripsBaseTableViewController.swift */; };
 		84B2804B1E276E00000E911B /* Authentication.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84B280491E276E00000E911B /* Authentication.storyboard */; };
 		84B7EA201E3374CA00164DBE /* ManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B7EA1F1E3374CA00164DBE /* ManagedObject.swift */; };
@@ -253,6 +254,7 @@
 		84AD582B1E680CD10002E627 /* NetworkConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkConnection.swift; sourceTree = "<group>"; };
 		84AD582E1E68485C0002E627 /* Currency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		84AD58301E68486E0002E627 /* CurrencyEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyEntity.swift; sourceTree = "<group>"; };
+		84B114FD1E71814B002DB686 /* DefaultAlamofireManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAlamofireManager.swift; sourceTree = "<group>"; };
 		84B2383A1E5ADFA000830C11 /* TripsBaseTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripsBaseTableViewController.swift; sourceTree = "<group>"; };
 		84B2804A1E276E00000E911B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Authentication.storyboard; sourceTree = "<group>"; };
 		84B7EA1F1E3374CA00164DBE /* ManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedObject.swift; sourceTree = "<group>"; };
@@ -1022,6 +1024,14 @@
 			path = Currency;
 			sourceTree = "<group>";
 		};
+		84B114FC1E718139002DB686 /* DefaultAlamofireManager */ = {
+			isa = PBXGroup;
+			children = (
+				84B114FD1E71814B002DB686 /* DefaultAlamofireManager.swift */,
+			);
+			path = DefaultAlamofireManager;
+			sourceTree = "<group>";
+		};
 		84B238391E5ADF8E00830C11 /* TripsBaseTableViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1085,6 +1095,7 @@
 				848493591E30A5C50050409A /* Services */,
 				84CBEF811E3A0749000057DA /* NetworkError */,
 				84AD582A1E680CB90002E627 /* NetworkConnection */,
+				84B114FC1E718139002DB686 /* DefaultAlamofireManager */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -1300,7 +1311,6 @@
 				AD73FA958726694CE4CD6FC7 /* [CP] Embed Pods Frameworks */,
 				16C6DBA882080079F0A12890 /* [CP] Copy Pods Resources */,
 				84580D0F1E2D043E00CFB3E5 /* ShellScript */,
-				842CD08C1E3B6198007C8E5A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1402,19 +1412,6 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		842CD08C1E3B6198007C8E5A /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "";
-		};
 		84580D0F1E2D043E00CFB3E5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1482,6 +1479,7 @@
 				84F8A87B1E52EF5D00EB66A7 /* StaticDataT2FService.swift in Sources */,
 				84259B0A1E54CB3D00D1E1A3 /* ProfileTableViewController.swift in Sources */,
 				84116F371E55EF5B00917D10 /* LocalFileEntity.swift in Sources */,
+				84B114FE1E71814B002DB686 /* DefaultAlamofireManager.swift in Sources */,
 				84F5F8331E1D275D00A8D990 /* AppDelegate.swift in Sources */,
 				8456646B1E51CA11006B8751 /* WBSEntity.swift in Sources */,
 				843374941E290284004DAC6C /* DefaultTheme.swift in Sources */,
@@ -1893,17 +1891,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_DISPLAY_NAME = eTrips;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = RUJR756488;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = eTrips/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
-				PRODUCT_BUNDLE_IDENTIFIER = org.unicef.etools.etrips.prod;
+				PRODUCT_BUNDLE_IDENTIFIER = org.unicef.etools.etrips;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ce78f455-35c0-429e-80d0-cc040491065f";
-				PROVISIONING_PROFILE_SPECIFIER = "PROD ETRIPS 3MAR";
+				PROVISIONING_PROFILE = "c0192fe1-8f0e-405c-881a-79c68a74a388";
+				PROVISIONING_PROFILE_SPECIFIER = WILDCARD;
 				SWIFT_OBJC_BRIDGING_HEADER = "eTrips/eTrips-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};

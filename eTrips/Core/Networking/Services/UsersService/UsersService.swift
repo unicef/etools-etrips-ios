@@ -19,6 +19,8 @@ class UsersService {
 						                                     object: user)
 					}
 					
+					CoreDataStack.shared.saveContext()
+					
 					completion(true)
 				} catch {
 					completion(false)

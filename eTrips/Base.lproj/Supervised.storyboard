@@ -59,7 +59,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic_profile" width="21" height="20"/>
-        <image name="ic_superviced_tab" width="17" height="24"/>
+        <image name="ic_profile" width="18" height="18"/>
+        <image name="ic_superviced_tab" width="19" height="23"/>
     </resources>
 </document>

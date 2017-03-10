@@ -6,7 +6,8 @@ class LoginSOAPService {
 	let adfsEndpoint = "https://login.unicef.org/adfs/services/trust/13/UsernameMixed"
 	let resourceEndpoint = "https://etools.unicef.org/API"
 	
-	func login(_ username: String, _ password: String,
+	func login(_ username: String,
+	           _ password: String,
 	           completion: @escaping LoginSOAPServiceCompletionHandler) {
 		
 		let request = NSMutableURLRequest(url: URL(string: adfsEndpoint)!)
@@ -19,14 +20,16 @@ class LoginSOAPService {
 		let task = session.dataTask(with: request as URLRequest) { data, response, error in
 			guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
 				DispatchQueue.main.async {
-					completion(false, NetworkError(title: "Error", detail: "Network Error"))
+					completion(false,
+					           NetworkError(title: "Error",
+					                        detail: "The security token could not be authenticated or authorized."))
 				}
 				return
 			}
 			
 			guard error == nil else {
 				DispatchQueue.main.async {
-					completion(false, NetworkError(title: "Error", detail: error.debugDescription))
+					completion(false, NetworkError(title: "Error", detail: error?.localizedDescription))
 				}
 				return
 			}

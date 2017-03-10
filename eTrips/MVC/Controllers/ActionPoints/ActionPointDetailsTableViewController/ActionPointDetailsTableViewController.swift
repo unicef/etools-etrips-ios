@@ -92,9 +92,17 @@ class ActionPointDetailsTableViewController: UITableViewController {
 				actionPoint = ActionPointEntity.createNewDraftEntity(in: scratchpadContext,
 				                                                     withCreatorID: uID)
 			}
-		} else if actionPoint.trip?.type == .supervised { // `Supervised` action points viewing.
+			// `Supervised` action points viewing.
+		} else if actionPoint.trip?.type == .supervised {
+			
+			if let uID = userID {
+				if uID == Int(actionPoint.assignedByPersonID) {
+					setupSaveButton()
+				}
+			}
+			
 			navigationItem.title = "Action Point"
-		} else {  // `My Action Points` viewing and editing.
+		} else { // `My Action Points` viewing and editing.
 			setupSaveButton()
 			navigationItem.title = "My Action Point"
 		}
@@ -365,10 +373,12 @@ extension ActionPointDetailsTableViewController {
 			
 			cell.applyDate(actionPoint.completedAt as? Date)
 			
-			if actionPoint.trip?.type == .supervised {
-				cell.dateTextField.isUserInteractionEnabled = false
-			} else {
-				cell.dateTextField.isUserInteractionEnabled = true
+			if let userID = userID {
+				if actionPoint.trip?.type == .supervised && actionPoint.assignedByPersonID != Int64(userID) {
+					cell.dateTextField.isUserInteractionEnabled = false
+				} else {
+					cell.dateTextField.isUserInteractionEnabled = true
+				}
 			}
 			cell.delegate = self
 			return cell
@@ -395,10 +405,12 @@ extension ActionPointDetailsTableViewController {
 			
 			cell.charactersLimit = 254
 			
-			if actionPoint.trip?.type == .supervised {
-				cell.inputTextView.isUserInteractionEnabled = false
-			} else {
-				cell.inputTextView.isUserInteractionEnabled = true
+			if let userID = userID {
+				if actionPoint.trip?.type == .supervised && actionPoint.assignedByPersonID != Int64(userID) {
+					cell.inputTextView.isUserInteractionEnabled = false
+				} else {
+					cell.inputTextView.isUserInteractionEnabled = true
+				}
 			}
 			
 			cell.inputTextView.text = actionPoint.actionsTaken
@@ -410,10 +422,12 @@ extension ActionPointDetailsTableViewController {
 				fatalError()
 			}
 			
-			if actionPoint.trip?.type == .supervised {
-				cell.switcher.isUserInteractionEnabled = false
-			} else {
-				cell.switcher.isUserInteractionEnabled = true
+			if let userID = userID {
+				if actionPoint.trip?.type == .supervised && actionPoint.assignedByPersonID != Int64(userID) {
+					cell.switcher.isUserInteractionEnabled = false
+				} else {
+					cell.switcher.isUserInteractionEnabled = true
+				}
 			}
 			cell.switcher.isOn = actionPoint.followUp
 			cell.delegate = self

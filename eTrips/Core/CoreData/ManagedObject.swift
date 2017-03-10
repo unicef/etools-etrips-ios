@@ -59,11 +59,14 @@ extension ManagedObjectType where Self: ManagedObject {
 	}
 	
 	public static func findOrFetch(in context: NSManagedObjectContext, with predicate: NSPredicate) -> Self? {
-		return fetch(in: context) { request in
-			request.predicate = predicate
-			request.returnsObjectsAsFaults = false
-			request.fetchLimit = 1
-		}.first
+        guard let object = materializedObject(in: context, matching: predicate) else {
+            return fetch(in: context) { request in
+                request.predicate = predicate
+                request.returnsObjectsAsFaults = false
+                request.fetchLimit = 1
+            }.first
+        }
+        return object
 	}
 	
 	public static func fetch(in context: NSManagedObjectContext,
@@ -75,6 +78,14 @@ extension ManagedObjectType where Self: ManagedObject {
 		}
 		return result
 	}
+	
+    public static func materializedObject(in context: NSManagedObjectContext, matching predicate: NSPredicate) -> Self? {
+        for object in context.registeredObjects where !object.isFault {
+            guard let result = object as? Self, predicate.evaluate(with: result) else { continue }
+            return result
+        }
+        return nil
+    }
 }
 
 extension ManagedObjectType where Self: ManagedObject {

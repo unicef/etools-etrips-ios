@@ -88,7 +88,12 @@ class TripReportTableViewController: UITableViewController {
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		reportText = tripEntity.localReport?.report
+
+		if tripEntity.isReportSubmitted {
+			reportText = tripEntity.report
+		} else {
+			reportText = tripEntity.localReport?.report
+		}
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {
@@ -279,16 +284,17 @@ class TripReportTableViewController: UITableViewController {
 
 		// "List of photos" section.
 		if !tripEntity.isReportSubmitted {
-			if let localFiles = tripEntity.localFiles {
+			if let localFiles = tripEntity.localFiles { // Local files.
 				if !localFiles.isEmpty {
 					sections.append(Section(type: .photosSection,
 					                        rows: Array(repeating: .photoRow, count: localFiles.count)))
 				}
 			}
 		} else {
-			if let files = tripEntity.files {
+			if let files = tripEntity.files {  // Remote files.
 				if !files.isEmpty {
-					sections.append(Section(type: .photosSection, rows: Array(repeating: .photoRow, count: files.count)))
+					sections.append(Section(type: .photosSection,
+					                        rows: Array(repeating: .photoRow, count: files.count)))
 				}
 			}
 		}
@@ -355,7 +361,7 @@ extension TripReportTableViewController {
 		switch sections[section].type {
 		case .reportSection:
 			return "REPORT"
-		case .addPhotoSection:
+		case .addPhotoSection, .photosSection:
 			return "PHOTOS"
 		default:
 			return nil
@@ -459,21 +465,29 @@ extension TripReportTableViewController {
 			addPhotoAction(at: indexPath)
 		case .photoRow:
 			if tripEntity.isReportSubmitted {
-				let fileEntity = Array(tripEntity.files!)[indexPath.row]
-
 				guard let tripPhotoTableViewController = TripPhotoTableViewController.viewControllerFromStoryboard()
 					as? TripPhotoTableViewController else { return }
 
-				tripPhotoTableViewController.fileEntity = fileEntity
+				let cell = tableView.cellForRow(at: indexPath) as! TripPhotoTableViewCell
+				guard let image = cell.photoImageView?.image else { return }
+			
+				tripPhotoTableViewController.image = image
+				tripPhotoTableViewController.caption = cell.captionLabel.text
+				tripPhotoTableViewController.tripEntity = tripEntity
+				
 				let navigationController = UINavigationController(rootViewController: tripPhotoTableViewController)
 				present(navigationController, animated: true, completion: nil)
 			} else {
-				let localFileEntity = Array(tripEntity.localFiles!)[indexPath.row]
-
 				guard let tripPhotoTableViewController = TripPhotoTableViewController.viewControllerFromStoryboard()
 					as? TripPhotoTableViewController else { return }
-
-				tripPhotoTableViewController.localFileEntity = localFileEntity
+				
+				let cell = tableView.cellForRow(at: indexPath) as! TripPhotoTableViewCell
+				guard let image = cell.photoImageView?.image else { return }
+			
+				tripPhotoTableViewController.image = image
+				tripPhotoTableViewController.caption = cell.captionLabel.text
+				tripPhotoTableViewController.tripEntity = tripEntity
+				
 				let navigationController = UINavigationController(rootViewController: tripPhotoTableViewController)
 				present(navigationController, animated: true, completion: nil)
 			}

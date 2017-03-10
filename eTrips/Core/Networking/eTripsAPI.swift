@@ -22,9 +22,8 @@ enum eTripsAPI {
 	case staticData
 	case staticDataT2F
 	case actionPoints(userID: Int, page: Int, pageSize: Int)
-    case updateActionPoint(point: ActionPointEntity)
-    case addActionPoint(points: [ActionPointEntity], tripID: Int)
-
+	case updateActionPoint(point: ActionPointEntity)
+	case addActionPoint(points: [ActionPointEntity], tripID: Int)
 }
 
 let endpointClosure = { (target: eTripsAPI) -> Endpoint<eTripsAPI> in
@@ -43,10 +42,10 @@ let endpointClosure = { (target: eTripsAPI) -> Endpoint<eTripsAPI> in
 	}
 }
 
-let eTripsAPIProvider = MoyaProvider<eTripsAPI>(endpointClosure: endpointClosure)
+let eTripsAPIProvider = MoyaProvider<eTripsAPI>(endpointClosure: endpointClosure,
+                                                manager: DefaultAlamofireManager.shared)
 
 extension eTripsAPI: TargetType {
-
 	var baseURL: URL {
 		return URL(string: Configuration.sharedInstance.baseURL())!
 	}
@@ -77,10 +76,10 @@ extension eTripsAPI: TargetType {
 			return "/api/t2f/action_points/"
 		case .transition(let tripID, let transition, _):
 			return "/api/t2f/travels/\(tripID)/\(transition.rawValue)/"
-        case .updateActionPoint(let point):
-            return "/api/t2f/action_points/\(point.pointID)/"
-        case .addActionPoint(_, let tripID):
-            return "/api/t2f/travels/\(tripID)/"
+		case .updateActionPoint(let point):
+			return "/api/t2f/action_points/\(point.pointID)/"
+		case .addActionPoint(_, let tripID):
+			return "/api/t2f/travels/\(tripID)/"
 		}
 	}
 
@@ -112,10 +111,10 @@ extension eTripsAPI: TargetType {
 			return ["report": report]
 		case .actionPoints(let userID, let page, let pageSize):
 			return ["f_person_responsible": userID, "page": page, "page_size": pageSize, "sort_by": "due_date"]
-        case .updateActionPoint(let point):
-            return point.dictionaryValue()
-        case .addActionPoint(let points, _):
-            return ["action_points": points.map { $0.dictionaryValue() }]
+		case .updateActionPoint(let point):
+			return point.dictionaryValue()
+		case .addActionPoint(let points, _):
+			return ["action_points": points.map { $0.dictionaryValue() }]
 		case .transition(_, _, let rejectionNote):
 			if rejectionNote != nil {
 				return ["rejection_note": rejectionNote ?? ""]
@@ -151,7 +150,7 @@ extension eTripsAPI: TargetType {
 			                                             name: "name",
 			                                             fileName: nil,
 			                                             mimeType: "text"),
-									   MultipartFormData(provider: .data("Picture".data(using: .utf8)!),
+			                           MultipartFormData(provider: .data("Picture".data(using: .utf8)!),
 			                                             name: "type",
 			                                             fileName: nil,
 			                                             mimeType: "text")]))

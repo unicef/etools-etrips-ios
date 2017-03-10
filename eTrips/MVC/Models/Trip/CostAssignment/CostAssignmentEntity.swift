@@ -44,7 +44,6 @@ public final class CostAssignmentEntity: ManagedObject {
 
 // MARK: - ManagedObjectType
 extension CostAssignmentEntity: ManagedObjectType {
-	
 	public static var entityName: String {
 		return "CostAssignmentEntity"
 	}

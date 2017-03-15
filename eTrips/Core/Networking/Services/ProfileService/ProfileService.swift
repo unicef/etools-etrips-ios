@@ -11,23 +11,29 @@ class ProfileService {
 		eTripsAPIProvider.request(.profile) { result in
 			switch result {
 			case let .success(response):
+				let statusCode = response.statusCode
 				
-				do {
-					let parsedProfile: Profile? = try response.mapObject(Profile.self)
-					
-					guard let profile = parsedProfile else {
+				switch statusCode {
+				case 200...299:
+					do {
+						let parsedProfile: Profile? = try response.mapObject(Profile.self)
+						
+						guard let profile = parsedProfile else {
+							completion(false)
+						}
+						
+						_ = ProfileEntity.insert(into: CoreDataStack.shared.managedObjectContext, object: profile)
+						
+						CoreDataStack.shared.managedObjectContext.performSaveOrRollback()
+						completion(true)
+						
+					} catch {
 						completion(false)
 					}
 					
-					_ = ProfileEntity.insert(into: CoreDataStack.shared.managedObjectContext, object: profile)
-					
-					CoreDataStack.shared.managedObjectContext.performSaveOrRollback()
-					completion(true)
-					
-				} catch {
+				default:
 					completion(false)
 				}
-				
 			case .failure:
 				completion(false)
 			}

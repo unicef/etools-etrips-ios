@@ -27,9 +27,7 @@ class LoginService {
 					} catch {
 						completion(false, nil)
 					}
-					
 				default:
-				
 					do {
 						if let json = try response.mapJSON() as? NSDictionary {
 							if let messages = json.allValues.first as? [String] {

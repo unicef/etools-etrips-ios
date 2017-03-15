@@ -324,7 +324,21 @@ extension TripInfoTableViewDataSource: UITableViewDelegate {
 				if tripEntity.type == .myTrip {
 					let hud = MBProgressHUD.showAdded(to: (controller?.navigationController?.view)!, animated: true)
 					transitionService.transition(tripID: Int(tripEntity.tripID),
-					                             transition: .submitForApproval, rejectionNote: nil) { _ in
+					                             transition: .submitForApproval,
+					                             rejectionNote: nil) { _, error in
+
+						if let error = error {
+							let alert = UIAlertController(title: error.title,
+							                              message: error.detail,
+							                              preferredStyle: .alert)
+							let okAction = UIAlertAction(title: "OK",
+							                             style: .cancel,
+							                             handler: nil)
+
+							alert.addAction(okAction)
+
+							self.controller?.present(alert, animated: true, completion: nil)
+						}
 						hud.hide(animated: true)
 					}
 				}
@@ -333,7 +347,20 @@ extension TripInfoTableViewDataSource: UITableViewDelegate {
 				if tripEntity.type == .supervised {
 					let hud = MBProgressHUD.showAdded(to: (controller?.navigationController?.view)!, animated: true)
 					transitionService.transition(tripID: Int(tripEntity.tripID),
-					                             transition: .approve, rejectionNote: nil) { _ in
+					                             transition: .approve,
+					                             rejectionNote: nil) { _, error in
+						if let error = error {
+							let alert = UIAlertController(title: error.title,
+							                              message: error.detail,
+							                              preferredStyle: .alert)
+							let okAction = UIAlertAction(title: "OK",
+							                             style: .cancel,
+							                             handler: nil)
+
+							alert.addAction(okAction)
+
+							self.controller?.present(alert, animated: true, completion: nil)
+						}
 						hud.hide(animated: true)
 					}
 				}
@@ -342,7 +369,20 @@ extension TripInfoTableViewDataSource: UITableViewDelegate {
 				if tripEntity.type == .supervised {
 					let hud = MBProgressHUD.showAdded(to: (controller?.navigationController?.view)!, animated: true)
 					transitionService.transition(tripID: Int(tripEntity.tripID),
-					                             transition: .approveCertificate, rejectionNote: nil) { _ in
+					                             transition: .approveCertificate,
+					                             rejectionNote: nil) { _, error in
+						if let error = error {
+							let alert = UIAlertController(title: error.title,
+							                              message: error.detail,
+							                              preferredStyle: .alert)
+							let okAction = UIAlertAction(title: "OK",
+							                             style: .cancel,
+							                             handler: nil)
+
+							alert.addAction(okAction)
+
+							self.controller?.present(alert, animated: true, completion: nil)
+						}
 						hud.hide(animated: true)
 					}
 				}
@@ -357,7 +397,21 @@ extension TripInfoTableViewDataSource: UITableViewDelegate {
 				if tripEntity.type == .supervised {
 					let hud = MBProgressHUD.showAdded(to: (controller?.navigationController?.view)!, animated: true)
 					transitionService.transition(tripID: Int(tripEntity.tripID),
-					                             transition: .reject, rejectionNote: controller?.rejectionNote) { _ in
+					                             transition: .reject,
+					                             rejectionNote: controller?.rejectionNote) { _, error in
+						if let error = error {
+							let alert = UIAlertController(title: error.title,
+							                              message: error.detail,
+							                              preferredStyle: .alert)
+							let okAction = UIAlertAction(title: "OK",
+							                             style: .cancel,
+							                             handler: nil)
+
+							alert.addAction(okAction)
+
+							self.controller?.present(alert, animated: true, completion: nil)
+						}
+
 						hud.hide(animated: true)
 					}
 				}
@@ -367,7 +421,19 @@ extension TripInfoTableViewDataSource: UITableViewDelegate {
 					let hud = MBProgressHUD.showAdded(to: (controller?.navigationController?.view)!, animated: true)
 					transitionService.transition(tripID: Int(tripEntity.tripID),
 					                             transition: .rejectСertificate,
-					                             rejectionNote: controller?.rejectionNote) { _ in
+					                             rejectionNote: controller?.rejectionNote) { _, error in
+						if let error = error {
+							let alert = UIAlertController(title: error.title,
+							                              message: error.detail,
+							                              preferredStyle: .alert)
+							let okAction = UIAlertAction(title: "OK",
+							                             style: .cancel,
+							                             handler: nil)
+
+							alert.addAction(okAction)
+
+							self.controller?.present(alert, animated: true, completion: nil)
+						}
 						hud.hide(animated: true)
 					}
 				}

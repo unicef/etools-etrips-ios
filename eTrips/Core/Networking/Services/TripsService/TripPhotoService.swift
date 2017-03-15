@@ -10,8 +10,15 @@ class TripPhotoService {
 	            completion: @escaping TripPhotoUploadCompletionHandler) {
 		eTripsAPIProvider.request(.uploadTripPhoto(photo: photo, caption: caption, trip: trip)) { result in
 			switch result {
-			case .success:
-				completion(true, nil)
+			case let .success(response):
+				let statusCode = response.statusCode
+				
+				switch statusCode {
+					case 200...299:
+						completion(true, nil)
+					default:
+						completion(false, nil)
+				}
 			case let .failure(error):
 				switch error {
 				case .underlying(let nsError as NSError?):

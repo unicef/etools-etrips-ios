@@ -126,7 +126,6 @@ class ActionPointDetailsTableViewController: UITableViewController {
 		if isNewPoint {
 			addNewActionPoint(point: pointToSave)
 		} else {
-			
 			updateActionPoint(point: pointToSave)
 		}
 	}

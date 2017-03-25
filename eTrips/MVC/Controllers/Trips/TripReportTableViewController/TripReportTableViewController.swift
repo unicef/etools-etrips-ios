@@ -361,7 +361,12 @@ extension TripReportTableViewController {
 		switch sections[section].type {
 		case .reportSection:
 			return "REPORT"
-		case .addPhotoSection, .photosSection:
+		case .addPhotoSection:
+			return "PHOTOS"
+		case .photosSection:
+			if sections.contains(where: { $0.type == .addPhotoSection }) {
+				return nil
+			}
 			return "PHOTOS"
 		default:
 			return nil

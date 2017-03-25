@@ -294,6 +294,8 @@ public final class TripEntity: ManagedObject {
 			// Rejection Note.
 			if let rejectionNote = object.rejectionNote {
 				$0.rejectionNote = rejectionNote
+			} else {
+				$0.rejectionNote = ""
 			}
 
 			// Last modified.

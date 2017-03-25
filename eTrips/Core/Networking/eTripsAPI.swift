@@ -3,9 +3,9 @@ import Moya
 
 public enum TripTransition: String {
 	case submitForApproval = "submit_for_approval"
-	case approve = "approve"
+	case approve
 	case approveCertificate = "approve_certificate"
-	case reject = "reject"
+	case reject
 	case rejectСertificate = "reject_certificate"
 }
 
@@ -116,11 +116,10 @@ extension eTripsAPI: TargetType {
 		case .addActionPoint(let points, _):
 			return ["action_points": points.map { $0.dictionaryValue() }]
 		case .transition(_, _, let rejectionNote):
-			if rejectionNote != nil {
-				return ["rejection_note": rejectionNote ?? ""]
-			} else {
-				return nil
+			guard let rejectionNote = rejectionNote else {
+				return ["rejection_note": NSNull()]
 			}
+			return ["rejection_note": rejectionNote]
 		default:
 			return nil
 		}

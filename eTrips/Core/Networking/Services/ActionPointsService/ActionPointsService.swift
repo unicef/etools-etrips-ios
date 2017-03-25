@@ -109,13 +109,12 @@ class ActionPointsService {
 						                                            object: point)
 						
 						completion(true, nil)
-						
 					} catch {
 						completion(false, nil)
 					}
 				case 400:
 					completion(false, NetworkError(title: "Error",
-					                               detail: "Verify action point. Due date cannot be earlier than today."))
+					                               detail: "Please, verify action point. Some information is missing or incorrect"))
 				case 401, 403:
 					NotificationCenter.default.post(name: Notification.Name.UserDidLogOutNotification, object: self)
 				default:
@@ -167,8 +166,9 @@ class ActionPointsService {
 						completion(false, nil)
 					}
 				case 400:
-					completion(false, NetworkError(title: "Error",
-					                               detail: "Verify action point. Due date cannot be earlier than today."))
+					completion(false,
+					           NetworkError(title: "Error",
+					                        detail: "Please, verify action point. Some information is missing or incorrect"))
 				case 401, 403:
 					NotificationCenter.default.post(name: Notification.Name.UserDidLogOutNotification, object: nil)
 				default:

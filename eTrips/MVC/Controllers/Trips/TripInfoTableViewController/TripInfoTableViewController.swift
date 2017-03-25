@@ -6,6 +6,7 @@ class TripInfoTableViewController: UITableViewController {
 		didSet {
 			observer = ManagedObjectObserver(object: tripEntity, changeHandler: { [unowned self] type in
 				if type == .update {
+					self.dataSource.setupSections()
 					self.dataSource.updateCurrency()
 					self.tableView.reloadData()
 				}

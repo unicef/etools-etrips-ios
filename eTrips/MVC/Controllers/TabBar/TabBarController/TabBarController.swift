@@ -23,7 +23,7 @@ class TabBarController: UITabBarController {
 		transitionToLogin()
 	}
 
-	// MARK: - Private
+	// MARK: - Methods
 	/// Setups as root view controller `LoginViewController`.
 	private func transitionToLogin() {
 		guard let loginViewController = LoginViewController.viewControllerFromStoryboard() else {

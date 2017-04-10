@@ -1,17 +1,29 @@
 import UIKit
 import SKPhotoBrowser
 
+/// Controller responsible for adding info about photo and photo preview from trip report screen.
 class TripPhotoTableViewController: UITableViewController {
-	public var image: UIImage?
-
+	/// Entity of the report in the CoreData. Contains all info about trip with report and photos.
 	public var tripEntity: TripEntity!
-	public var caption: String?
+	
+	/// Mode of the screen `add`, `preview`, `undefined`.
+	public var mode: Mode = .undefined
+	enum Mode {
+		case add(UIImage)
+		case preview(UIImage, String)
+		case undefined
+	}
 
+	/// Caption for the photo that user enters.
+	fileprivate var caption: String?
+
+	/// Section Type for describing and configuring table view controller.
 	fileprivate enum SectionType {
 		case photoSection
 		case captionSection
 	}
-
+	
+	/// Row enum for describing each row in the table view controller for easy configuring screen on the fly.
 	fileprivate enum Row {
 		case photoRow
 		case captionRow
@@ -25,13 +37,15 @@ class TripPhotoTableViewController: UITableViewController {
 			}
 		}
 	}
-
+	
+	/// Section struct describes each section with `SectionType` and list of rows in the table view controller.
 	fileprivate struct Section {
 		var type: SectionType
 		var rows: [Row]
 	}
-
 	fileprivate var sections = [Section]()
+	
+	var managedObjectContext = CoreDataStack.shared.managedObjectContext
 
 	// MARK: - Lifecycle
 	override func viewDidLoad() {
@@ -58,56 +72,56 @@ class TripPhotoTableViewController: UITableViewController {
 	func saveBarButtonItemAction() {
 		dismissKeyboard()
 
-		let imageName = Date().timestamp()
-
-		if let image = image {
-			// Compression to 1MB.
-			var compression: CGFloat = 1.0
-			while compression >= 0.0 {
-				if let imageData = UIImageJPEGRepresentation(image, compression) {
-					if imageData.count < 1000000 {
-						break
-					}
-					compression -= 0.1
-				} else {
-					break
-				}
-			}
-
-			if let data = UIImageJPEGRepresentation(image, compression) {
-				let filename = getDocumentsDirectory().appendingPathComponent(String(imageName))
-				try? data.write(to: filename)
-
-				let localFileEntity = LocalFileEntity.findOrCreate(in: CoreDataStack.shared.managedObjectContext,
-				                                                   fileID: imageName,
-				                                                   tripID: tripEntity.tripID,
-				                                                   fileURL: filename.absoluteString,
-				                                                   caption: caption ?? "No caption.")
-				localFileEntity.trip = tripEntity
-				tripEntity.mutableLocalFiles.add(localFileEntity)
-
-				CoreDataStack.shared.saveContext()
-			}
+		switch mode {
+		case Mode.add(let photo):
+			compressPhotoAndSaveToCoreData(photo)
+		default:
+			break
 		}
 
 		dismiss(animated: true, completion: nil)
 	}
 
-	func getDocumentsDirectory() -> URL {
+	// MARK: - Methods
+	private func compressPhotoAndSaveToCoreData(_ photo: UIImage) {
+		let imageName = Date().timestamp()
+		// Compression to 1MB.
+		var compression: CGFloat = 1.0
+		while compression >= 0.0 {
+			if let imageData = UIImageJPEGRepresentation(photo, compression) {
+				if imageData.count < 1000000 {
+					break
+				}
+				compression -= 0.1
+			} else {
+				break
+			}
+		}
+
+		if let data = UIImageJPEGRepresentation(photo, compression) {
+			let filename = documentsDirectory().appendingPathComponent(String(imageName))
+			try? data.write(to: filename)
+
+			let localFileEntity = LocalFileEntity.findOrCreate(in: managedObjectContext,
+			                                                   fileID: imageName,
+			                                                   tripID: tripEntity.tripID,
+			                                                   fileURL: filename.absoluteString,
+			                                                   caption: caption ?? "No Caption.")
+			localFileEntity.trip = tripEntity
+			tripEntity.mutableLocalFiles.add(localFileEntity)
+
+			CoreDataStack.shared.saveContext()
+		}
+	}
+	
+	/// Returns a documents directory in the file system.
+	private func documentsDirectory() -> URL {
 		let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
 		let documentsDirectory = paths[0]
 		return documentsDirectory
 	}
 
-	// MARK: - Methods
 	private func setupNavigationBar() {
-
-		if caption != nil {
-			title = "Photo"
-		} else {
-			title = "Add Photo"
-		}
-
 		// Cancel button.
 		let cancelBarButtonItem =
 			UIBarButtonItem(title: "Cancel",
@@ -124,32 +138,44 @@ class TripPhotoTableViewController: UITableViewController {
 			                target: self,
 			                action: #selector(TripPhotoTableViewController.saveBarButtonItemAction))
 
-		if caption != nil {
+		switch mode {
+		case .add:
+			title = "Add Photo"
+			navigationItem.rightBarButtonItem = saveBarButtonItem
+			navigationItem.leftBarButtonItem = cancelBarButtonItem
+		case .preview:
+			title = "Photo"
 			cancelBarButtonItem.title = "Close"
 			navigationItem.rightBarButtonItem = nil
 			navigationItem.leftBarButtonItem = cancelBarButtonItem
-		} else {
-			navigationItem.rightBarButtonItem = saveBarButtonItem
-			navigationItem.leftBarButtonItem = cancelBarButtonItem
-
+		default:
+			break
 		}
+
 	}
 
-	func setupTableView() {
+	private func setupTableView() {
 		tableView.tableFooterView = UIView()
 		tableView.reloadData()
 	}
 
-	func dismissKeyboard() {
+	private func dismissKeyboard() {
 		self.view.endEditing(true)
 	}
 
-	func checkSaveButton() {
-		if let caption = caption {
-
+	/// Checks the state of the "Save" button. If caption is not entered "Save" button is disabled.
+	fileprivate func checkSaveButton() {
+		switch mode {
+		case .add:
+			guard let caption = caption else {
+				navigationItem.rightBarButtonItem?.isEnabled = false
+				return
+			}
 			navigationItem.rightBarButtonItem?.isEnabled = !caption.isBlank
-		} else {
+		case .preview:
 			navigationItem.rightBarButtonItem?.isEnabled = false
+		default:
+			break
 		}
 	}
 }
@@ -175,8 +201,13 @@ extension TripPhotoTableViewController {
 				fatalError()
 			}
 
-			if let image = image {
-				cell.configure(photo: image)
+			switch mode {
+			case .add(let photo):
+				cell.configure(photo: photo)
+			case .preview(let photo, _):
+				cell.configure(photo: photo)
+			default:
+				break
 			}
 
 			return cell
@@ -187,15 +218,17 @@ extension TripPhotoTableViewController {
 				fatalError()
 			}
 
-			if caption != nil {
+			switch mode {
+			case .add:
 				cell.configure(with: caption, delegate: self)
-				cell.captionTextView.isEditable = false
-			} else {
-				cell.configure(with: "", delegate: self)
 				cell.captionTextView.isEditable = true
 				cell.captionTextView.becomeFirstResponder()
+			case .preview(_, let caption):
+				cell.configure(with: caption, delegate: self)
+				cell.captionTextView.isEditable = false
+			default:
+				break
 			}
-
 			return cell
 		}
 	}
@@ -205,12 +238,12 @@ extension TripPhotoTableViewController {
 
 		switch section {
 		case .captionSection:
-			if tripEntity.isReportSubmitted {
-				return nil
-			} else {
+			switch mode {
+			case .add:
 				return "You can’t add photo without description"
+			default:
+				return nil
 			}
-
 		default:
 			return nil
 		}
@@ -242,9 +275,15 @@ extension TripPhotoTableViewController {
 
 			var images = [SKPhoto]()
 
-			if let image = image {
-				let photo = SKPhoto.photoWithImage(image)
-				images.append(photo)
+			switch mode {
+			case let .add(photo):
+				let skPhoto = SKPhoto.photoWithImage(photo)
+				images.append(skPhoto)
+			case let .preview(photo, _):
+				let skPhoto = SKPhoto.photoWithImage(photo)
+				images.append(skPhoto)
+			default:
+				return
 			}
 
 			SKPhotoBrowserOptions.displayAction = false
@@ -270,9 +309,12 @@ extension TripPhotoTableViewController {
 
 		switch section {
 		case .captionSection:
-			if image != nil {
-				return 30
-			} else {
+			switch mode {
+			case .add:
+				return 30.0
+			case .preview:
+				return CGFloat.leastNonzeroMagnitude
+			default:
 				return CGFloat.leastNonzeroMagnitude
 			}
 		default:
@@ -291,7 +333,6 @@ extension TripPhotoTableViewController: UITextViewDelegate {
 	func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
 		return textView.text.characters.count + (text.characters.count - range.length) <= 255
 	}
-
 }
 
 // MARK: - ViewControllerFromStoryboard

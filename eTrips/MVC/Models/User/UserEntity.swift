@@ -3,43 +3,74 @@ import CoreData
 
 public final class UserEntity: ManagedObject {
 
-	@NSManaged private(set) public var userID: Int64
-	@NSManaged private(set) public var fullName: String
-	@NSManaged private(set) public var username: String
-	@NSManaged private(set) public var email: String
-	
-	public static func findAndUpdateOrCreate(in context: NSManagedObjectContext,
-	                                         object: User) -> UserEntity {
+    @NSManaged private(set) public var userID: Int64
+    @NSManaged private(set) public var name: String
+    @NSManaged private(set) public var firstName: String
+    @NSManaged private(set) public var lastName: String
 
-		let predicate = NSPredicate(format: "userID == %@", String(describing: object.userID!))
+    public static func insert(into context: NSManagedObjectContext, object: User) -> UserEntity {
+        let userEntity: UserEntity = context.insertObject()
 
-		let userEntity = findAndUpdateOrCreate(in: context, with: predicate) {
-			if let userID = object.userID {
-				$0.userID = Int64(userID)
-			}
-			
-			if let fullName = object.fullName {
-				$0.fullName = fullName
-			}
-			
-			if let username = object.username {
-				$0.username = username
-			}
-			
-			if let email = object.email {
-				$0.email = email
-			}
-		}
-		return userEntity
-	}
+        if let userID = object.userID {
+            userEntity.userID = Int64(userID)
+        }
+
+        if let name = object.name {
+            userEntity.name = name
+        }
+
+        if let firstName = object.firstName {
+            userEntity.firstName = firstName
+        }
+
+        if let lastName = object.lastName {
+            userEntity.lastName = lastName
+        }
+
+        return userEntity
+    }
+
+    public static func findAndUpdateOrCreate(in context: NSManagedObjectContext, object: User) -> UserEntity {
+
+        let predicate = NSPredicate(format: "userID == %@", String(describing: object.userID!))
+
+        let userEntity = findAndUpdateOrCreate(in: context, with: predicate) {
+            if let userID = object.userID {
+                $0.userID = Int64(userID)
+            }
+
+            if let name = object.name {
+                $0.name = name
+            }
+
+            if let firstName = object.firstName {
+                $0.firstName = firstName
+            }
+
+            if let lastName = object.lastName {
+                $0.lastName = lastName
+            }
+        }
+        return userEntity
+    }
+
+    public static func deleteAll(in context: NSManagedObjectContext) {
+        let usersFetchRequest = self.sortedFetchRequest
+
+        let fetchedUsers = try! context.fetch(usersFetchRequest) as! [UserEntity]
+
+        for userEntity in fetchedUsers {
+            context.delete(userEntity)
+        }
+    }
 }
 
 extension UserEntity: ManagedObjectType {
-	public static var entityName: String {
-		return "UserEntity"
-	}
+    public static var entityName: String {
+        return "UserEntity"
+    }
 
-	public static var defaultSortDescriptors: [NSSortDescriptor] {
-		return [NSSortDescriptor(key: "lastName", ascending: true)]
-	}
+    public static var defaultSortDescriptors: [NSSortDescriptor] {
+        return [NSSortDescriptor(key: "name", ascending: true)]
+    }
 }

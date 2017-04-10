@@ -24,6 +24,7 @@
 		3FD848471E570AE1008C8BB8 /* ActionPointTextInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD848461E570AE1008C8BB8 /* ActionPointTextInputCell.swift */; };
 		84116F351E55DD8A00917D10 /* LocalReportEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84116F341E55DD8A00917D10 /* LocalReportEntity.swift */; };
 		84116F371E55EF5B00917D10 /* LocalFileEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84116F361E55EF5B00917D10 /* LocalFileEntity.swift */; };
+		84138DF21E979A5400E9D0BB /* CurrenciesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84138DF11E979A5400E9D0BB /* CurrenciesService.swift */; };
 		8415A0B61E37719F0025F55A /* NSManagedObjectContext+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8415A0B51E37719F0025F55A /* NSManagedObjectContext+Extensions.swift */; };
 		841670681E6D4B6A0081D980 /* LoginSOAPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841670671E6D4B6A0081D980 /* LoginSOAPService.swift */; };
 		84207CA11E546393001B7039 /* TransitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84207CA01E546393001B7039 /* TransitionService.swift */; };
@@ -125,6 +126,7 @@
 		84CBEF831E3A075B000057DA /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CBEF821E3A075B000057DA /* NetworkError.swift */; };
 		84CFD6971E54D2C40036E64D /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CFD6961E54D2C40036E64D /* ProfileTableViewCell.swift */; };
 		84D2C14F1E4E4D060019E513 /* TripService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D2C14E1E4E4D060019E513 /* TripService.swift */; };
+		84D2C1F71E96CB25005E8F05 /* PersonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D2C1F61E96CB25005E8F05 /* PersonTableViewCell.swift */; };
 		84F5F8051E1D1AAB00A8D990 /* TabBar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84F5F8031E1D1AAB00A8D990 /* TabBar.storyboard */; };
 		84F5F8071E1D1AAB00A8D990 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84F5F8061E1D1AAB00A8D990 /* Assets.xcassets */; };
 		84F5F80A1E1D1AAB00A8D990 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84F5F8081E1D1AAB00A8D990 /* LaunchScreen.storyboard */; };
@@ -168,6 +170,7 @@
 		7CF1892C7C8D190CFD612EDF /* Pods-eTrips.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eTrips.debug.xcconfig"; path = "Pods/Target Support Files/Pods-eTrips/Pods-eTrips.debug.xcconfig"; sourceTree = "<group>"; };
 		84116F341E55DD8A00917D10 /* LocalReportEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalReportEntity.swift; sourceTree = "<group>"; };
 		84116F361E55EF5B00917D10 /* LocalFileEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalFileEntity.swift; sourceTree = "<group>"; };
+		84138DF11E979A5400E9D0BB /* CurrenciesService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrenciesService.swift; sourceTree = "<group>"; };
 		8415A0B51E37719F0025F55A /* NSManagedObjectContext+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSManagedObjectContext+Extensions.swift"; sourceTree = "<group>"; };
 		841670671E6D4B6A0081D980 /* LoginSOAPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginSOAPService.swift; sourceTree = "<group>"; };
 		84207CA01E546393001B7039 /* TransitionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionService.swift; sourceTree = "<group>"; };
@@ -188,7 +191,7 @@
 		843374AF1E2916AE004DAC6C /* ViewControllerFromStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerFromStoryboard.swift; sourceTree = "<group>"; };
 		843374B21E296D9A004DAC6C /* TripDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripDetailsViewController.swift; sourceTree = "<group>"; };
 		843A80C61E38AFF5006C13B3 /* TravelIteneraryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TravelIteneraryTableViewController.swift; sourceTree = "<group>"; };
-		8443F8FD1E2F75F2001196EF /* UserManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		8443F8FD1E2F75F2001196EF /* UserManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; usesTabs = 1; };
 		8443F9011E2F998C001196EF /* Trip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
 		8443F9061E2FBBF2001196EF /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		8447BED31E4EF44D009C72C5 /* UsersService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersService.swift; sourceTree = "<group>"; };
@@ -270,6 +273,7 @@
 		84CBEF821E3A075B000057DA /* NetworkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		84CFD6961E54D2C40036E64D /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
 		84D2C14E1E4E4D060019E513 /* TripService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripService.swift; sourceTree = "<group>"; };
+		84D2C1F61E96CB25005E8F05 /* PersonTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonTableViewCell.swift; sourceTree = "<group>"; };
 		84F5F7FC1E1D1AAB00A8D990 /* eTrips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = eTrips.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84F5F8041E1D1AAB00A8D990 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/TabBar.storyboard; sourceTree = "<group>"; };
 		84F5F8061E1D1AAB00A8D990 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -643,6 +647,7 @@
 			children = (
 				8456645A1E51AD37006B8751 /* StaticDataService.swift */,
 				84F8A87A1E52EF5D00EB66A7 /* StaticDataT2FService.swift */,
+				84138DF11E979A5400E9D0BB /* CurrenciesService.swift */,
 			);
 			path = StaticDataService;
 			sourceTree = "<group>";
@@ -753,6 +758,7 @@
 		847B1B3A1E2CFD99002BF64C /* ActionPoints */ = {
 			isa = PBXGroup;
 			children = (
+				84D2C1F21E96CA89005E8F05 /* PersonTableViewCell */,
 				84C449D51E686C8900B94E58 /* CustomTextField */,
 				3FD8483A1E55D139008C8BB8 /* DetailsViews */,
 				3FD8483F1E55E5A9008C8BB8 /* ActionPointStatusInputView */,
@@ -1116,6 +1122,14 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		84D2C1F21E96CA89005E8F05 /* PersonTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				84D2C1F61E96CB25005E8F05 /* PersonTableViewCell.swift */,
+			);
+			path = PersonTableViewCell;
+			sourceTree = "<group>";
+		};
 		84F5F7F31E1D1AAB00A8D990 = {
 			isa = PBXGroup;
 			children = (
@@ -1461,6 +1475,7 @@
 				845664691E51C64A006B8751 /* StaticDataEntity.swift in Sources */,
 				84F8A8841E52F15100EB66A7 /* Partnership.swift in Sources */,
 				3F9700571E546F5400F48685 /* ActionPointDetailsTableViewController.swift in Sources */,
+				84138DF21E979A5400E9D0BB /* CurrenciesService.swift in Sources */,
 				844F28ED1E3207E100615852 /* Date.swift in Sources */,
 				3F16EE061E52FDC80099A3FB /* ActionPoint.swift in Sources */,
 				84580D141E2E563A00CFB3E5 /* ActionPointTableViewCell.swift in Sources */,
@@ -1487,6 +1502,7 @@
 				8461F30F1E53798600ED4B28 /* EmptyView.swift in Sources */,
 				8456645B1E51AD37006B8751 /* StaticDataService.swift in Sources */,
 				844F28F51E32328700615852 /* ProgressHUD.swift in Sources */,
+				84D2C1F71E96CB25005E8F05 /* PersonTableViewCell.swift in Sources */,
 				3FD848371E55CE8F008C8BB8 /* ActionPointDateInputView.swift in Sources */,
 				844AC8641E407FCC0015D3DC /* TripTextReportTableViewCell.swift in Sources */,
 				8447BED91E4F02C6009C72C5 /* UserEntity.swift in Sources */,

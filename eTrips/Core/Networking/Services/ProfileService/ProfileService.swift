@@ -2,10 +2,11 @@ import Foundation
 import CoreData
 import Moya_ObjectMapper
 
-typealias ProfileServiceCompletionHandler = (Bool) -> Void
+typealias ProfileServiceCompletionHandler = (Bool, Int?) -> Void
 
 /// Class responsible for loading profile data and storing it to the Core Data.
 class ProfileService {
+	var managedObjectContext = CoreDataStack.shared.managedObjectContext
 	
 	func downloadProfile(completion: @escaping ProfileServiceCompletionHandler) {
 		eTripsAPIProvider.request(.profile) { result in
@@ -19,23 +20,22 @@ class ProfileService {
 						let parsedProfile: Profile? = try response.mapObject(Profile.self)
 						
 						guard let profile = parsedProfile else {
-							completion(false)
+							completion(false, nil)
 						}
 						
-						_ = ProfileEntity.insert(into: CoreDataStack.shared.managedObjectContext, object: profile)
+						_ = ProfileEntity.insert(into: self.managedObjectContext, object: profile)
 						
 						CoreDataStack.shared.managedObjectContext.performSaveOrRollback()
-						completion(true)
+						completion(true, parsedProfile?.businessArea)
 						
 					} catch {
-						completion(false)
+						completion(false, nil)
 					}
-					
 				default:
-					completion(false)
+					completion(false, nil)
 				}
 			case .failure:
-				completion(false)
+				completion(false, nil)
 			}
 		}
 		

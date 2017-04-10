@@ -4,7 +4,7 @@ target 'eTrips' do
 	use_frameworks!
 
 	# Network abstraction layer written in Swift.
-	pod 'Moya', '8.0.0'
+	pod 'Moya'
 	
 	# ObjectMapper bindings for Moya and RxSwift
 	pod 'Moya-ObjectMapper', :git => 'https://github.com/ivanbruel/Moya-ObjectMapper'

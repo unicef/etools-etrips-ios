@@ -25,6 +25,8 @@ class TripReportTableViewController: UITableViewController {
 			})
 		}
 	}
+	
+	var managedObjectContext = CoreDataStack.shared.managedObjectContext
 
 	/// Networking services.
 	let tripService = TripService()
@@ -78,7 +80,7 @@ class TripReportTableViewController: UITableViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		if let profile = ProfileEntity.profileEntityForLoggedInUser(in: CoreDataStack.shared.managedObjectContext) {
+		if let profile = ProfileEntity.profileEntityForLoggedInUser(in: managedObjectContext) {
 			profileEntity = profile
 
 			setupTableView()
@@ -193,21 +195,22 @@ class TripReportTableViewController: UITableViewController {
 					continue
 				}
 
-				let url = NSURL(string: file.fileURL)
-				let data = NSData(contentsOf: url! as URL)
-				print("Upload data \((data?.length)! / 1000) KB")
+				guard let url = NSURL(string: file.fileURL) else {
+					continue
+				}
+				
+				guard let data = NSData(contentsOf: url as URL) else {
+					continue
+				}
 
 				downloadGroup.enter()
-				self.tripPhotoService.upload(photo: data! as Data, caption: file.caption, for: trip) { success, error in
+				self.tripPhotoService.upload(photo: data as Data, caption: file.caption, for: trip) { _, error in
 					hud.progress += 0.8 / Float(localFiles.count)
 					downloadGroup.leave()
-					if success {
-						print("PHOTO UPLOADED")
-					} else if let error = error {
+					if let error = error {
 						uploadPhotoError = error
 					}
 				}
-
 			}
 		}
 
@@ -231,7 +234,7 @@ class TripReportTableViewController: UITableViewController {
 			}
 
 			// Delete local report and local files for the trip.
-			self.tripEntity.deleteLocalReport()
+			self.tripEntity.deleteLocalReport(in: self.managedObjectContext)
 
 			CoreDataStack.shared.saveContext()
 
@@ -250,7 +253,6 @@ class TripReportTableViewController: UITableViewController {
 
 				alert.addAction(okAction)
 				self.present(alert, animated: true, completion: nil)
-
 			}
 		}
 	}
@@ -315,7 +317,6 @@ class TripReportTableViewController: UITableViewController {
 		picker.sourceType = .photoLibrary
 		present(picker, animated: true, completion: nil)
 	}
-
 }
 
 // MARK: - UINavigationControllerDelegate
@@ -339,7 +340,7 @@ extension TripReportTableViewController: UIImagePickerControllerDelegate {
 		guard let tripPhotoTableViewController = TripPhotoTableViewController.viewControllerFromStoryboard()
 			as? TripPhotoTableViewController else { return }
 
-		tripPhotoTableViewController.image = newImage
+		tripPhotoTableViewController.mode = .add(newImage)
 		tripPhotoTableViewController.tripEntity = tripEntity
 		let navigationController = UINavigationController(rootViewController: tripPhotoTableViewController)
 		present(navigationController, animated: true, completion: nil)
@@ -469,33 +470,18 @@ extension TripReportTableViewController {
 		case .addPhotoRow:
 			addPhotoAction(at: indexPath)
 		case .photoRow:
-			if tripEntity.isReportSubmitted {
-				guard let tripPhotoTableViewController = TripPhotoTableViewController.viewControllerFromStoryboard()
-					as? TripPhotoTableViewController else { return }
+			guard let tripPhotoTableViewController = TripPhotoTableViewController.viewControllerFromStoryboard()
+				as? TripPhotoTableViewController else { return }
 
-				let cell = tableView.cellForRow(at: indexPath) as! TripPhotoTableViewCell
-				guard let image = cell.photoImageView?.image else { return }
+			let cell = tableView.cellForRow(at: indexPath) as! TripPhotoTableViewCell
+			guard let image = cell.photoImageView?.image else { return }
+			guard let caption = cell.captionLabel.text else { return }
+		
+			tripPhotoTableViewController.mode = .preview(image, caption)
+			tripPhotoTableViewController.tripEntity = tripEntity
 			
-				tripPhotoTableViewController.image = image
-				tripPhotoTableViewController.caption = cell.captionLabel.text
-				tripPhotoTableViewController.tripEntity = tripEntity
-				
-				let navigationController = UINavigationController(rootViewController: tripPhotoTableViewController)
-				present(navigationController, animated: true, completion: nil)
-			} else {
-				guard let tripPhotoTableViewController = TripPhotoTableViewController.viewControllerFromStoryboard()
-					as? TripPhotoTableViewController else { return }
-				
-				let cell = tableView.cellForRow(at: indexPath) as! TripPhotoTableViewCell
-				guard let image = cell.photoImageView?.image else { return }
-			
-				tripPhotoTableViewController.image = image
-				tripPhotoTableViewController.caption = cell.captionLabel.text
-				tripPhotoTableViewController.tripEntity = tripEntity
-				
-				let navigationController = UINavigationController(rootViewController: tripPhotoTableViewController)
-				present(navigationController, animated: true, completion: nil)
-			}
+			let navigationController = UINavigationController(rootViewController: tripPhotoTableViewController)
+			present(navigationController, animated: true, completion: nil)
 		case .submitRow:
 			submitReportAction()
 		default:
@@ -538,7 +524,7 @@ extension TripReportTableViewController {
 
 			let localFileEntity = Array(localFiles)[indexPath.row]
 			tripEntity.mutableLocalFiles.remove(localFileEntity)
-			CoreDataStack.shared.managedObjectContext.delete(localFileEntity)
+			managedObjectContext.delete(localFileEntity)
 
 			CoreDataStack.shared.saveContext()
 		}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16D32" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16E195" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="ActionPointEntity" representedClassName=".ActionPointEntity" parentEntity="RemovableEntity" syncable="YES">
         <attribute name="actionPointNumber" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="actionsTaken" optional="YES" attributeType="String" syncable="YES"/>
@@ -33,13 +33,12 @@
         <attribute name="expensesTotal" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="trip" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="TripEntity" inverseName="costSummary" inverseEntity="TripEntity" syncable="YES"/>
     </entity>
-    <entity name="CurrencyEntity" representedClassName=".CurrencyEntity" syncable="YES">
+    <entity name="CurrencyEntity" representedClassName=".CurrencyEntity" parentEntity="RemovableEntity" syncable="YES">
         <attribute name="code" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="currencyID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="exchangeToDollar" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="iso4127" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="data" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StaticDataEntity" inverseName="currencies" inverseEntity="StaticDataEntity" syncable="YES"/>
     </entity>
     <entity name="FileEntity" representedClassName=".FileEntity" parentEntity="RemovableEntity" syncable="YES">
         <attribute name="caption" optional="YES" attributeType="String" syncable="YES"/>
@@ -64,7 +63,7 @@
         <attribute name="tripID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TripEntity" inverseName="localFiles" inverseEntity="TripEntity" syncable="YES"/>
     </entity>
-    <entity name="LocalReportEntity" representedClassName=".LocalReportEntity" parentEntity="RemovableEntity" syncable="YES">
+    <entity name="LocalReportEntity" representedClassName=".LocalReportEntity" syncable="YES">
         <attribute name="report" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tripID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TripEntity" inverseName="localReport" inverseEntity="TripEntity" syncable="YES"/>
@@ -80,6 +79,7 @@
         <relationship name="data" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StaticDataT2FEntity" inverseName="partnerships" inverseEntity="StaticDataT2FEntity" syncable="YES"/>
     </entity>
     <entity name="ProfileEntity" representedClassName=".ProfileEntity" parentEntity="RemovableEntity" syncable="YES">
+        <attribute name="businessArea" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="country" attributeType="String" syncable="YES"/>
         <attribute name="firstName" attributeType="String" syncable="YES"/>
         <attribute name="jobTitle" optional="YES" attributeType="String" syncable="YES"/>
@@ -95,7 +95,6 @@
     </entity>
     <entity name="RemovableEntity" representedClassName="" isAbstract="YES" syncable="YES"/>
     <entity name="StaticDataEntity" representedClassName=".StaticDataEntity" parentEntity="RemovableEntity" syncable="YES">
-        <relationship name="currencies" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="CurrencyEntity" inverseName="data" inverseEntity="CurrencyEntity" syncable="YES"/>
         <relationship name="funds" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="FundEntity" inverseName="data" inverseEntity="FundEntity" syncable="YES"/>
         <relationship name="grants" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="GrantEntity" inverseName="data" inverseEntity="GrantEntity" syncable="YES"/>
         <relationship name="wbs" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="WBSEntity" inverseName="data" inverseEntity="WBSEntity" syncable="YES"/>
@@ -123,13 +122,13 @@
     <entity name="TripEntity" representedClassName=".TripEntity" parentEntity="RemovableEntity" syncable="YES">
         <attribute name="createdDate" optional="YES" attributeType="Date" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
         <attribute name="currencyID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="endDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lastModified" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="purposeOfTravel" attributeType="String" syncable="YES"/>
+        <attribute name="purposeOfTravel" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="referenceNumber" attributeType="String" syncable="YES"/>
         <attribute name="rejectionNote" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="report" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="startDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="status" attributeType="String" syncable="YES"/>
         <attribute name="supervisorID" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="supervisorName" optional="YES" attributeType="String" syncable="YES"/>
@@ -146,10 +145,10 @@
         <relationship name="travelItinerary" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="TravelItineraryEntity" inverseName="trip" inverseEntity="TravelItineraryEntity" syncable="YES"/>
     </entity>
     <entity name="UserEntity" representedClassName=".UserEntity" parentEntity="RemovableEntity" syncable="YES">
-        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="fullName" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastName" attributeType="String" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
         <attribute name="userID" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="username" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="WBSEntity" representedClassName=".WBSEntity" syncable="YES">
         <attribute name="name" attributeType="String" syncable="YES"/>
@@ -160,22 +159,22 @@
         <element name="ActionPointEntity" positionX="-15743" positionY="-6346" width="128" height="300"/>
         <element name="CostAssignmentEntity" positionX="-15338" positionY="-6768" width="128" height="133"/>
         <element name="CostSummaryEntity" positionX="-15149" positionY="-6655" width="128" height="103"/>
-        <element name="CurrencyEntity" positionX="-16254" positionY="-6208" width="128" height="133"/>
-        <element name="FileEntity" positionX="-15752" positionY="-6520" width="128" height="103"/>
+        <element name="CurrencyEntity" positionX="-16155" positionY="-6184" width="128" height="118"/>
+        <element name="FileEntity" positionX="-15797" positionY="-6471" width="128" height="103"/>
         <element name="FundEntity" positionX="-15941" positionY="-6232" width="128" height="90"/>
         <element name="GrantEntity" positionX="-16092" positionY="-6363" width="128" height="90"/>
-        <element name="LocalFileEntity" positionX="-15570" positionY="-6070" width="128" height="118"/>
-        <element name="LocalReportEntity" positionX="-15356" positionY="-6102" width="128" height="88"/>
+        <element name="LocalFileEntity" positionX="-15473" positionY="-6058" width="128" height="118"/>
+        <element name="LocalReportEntity" positionX="-15230" positionY="-6030" width="128" height="88"/>
         <element name="PartnerEntity" positionX="-16299" positionY="-6676" width="128" height="88"/>
         <element name="PartnershipEntity" positionX="-16067" positionY="-6741" width="128" height="88"/>
-        <element name="ProfileEntity" positionX="-15860" positionY="-6718" width="146" height="148"/>
-        <element name="RemovableEntity" positionX="-15543" positionY="-6957" width="128" height="45"/>
-        <element name="StaticDataEntity" positionX="-16101" positionY="-6586" width="128" height="103"/>
+        <element name="ProfileEntity" positionX="-15806" positionY="-6697" width="146" height="163"/>
+        <element name="RemovableEntity" positionX="-15543" positionY="-6957" width="128" height="43"/>
+        <element name="StaticDataEntity" positionX="-16101" positionY="-6586" width="128" height="88"/>
         <element name="StaticDataT2FEntity" positionX="-16265" positionY="-6822" width="128" height="73"/>
-        <element name="TravelActivityEntity" positionX="-15365" positionY="-6300" width="128" height="133"/>
+        <element name="TravelActivityEntity" positionX="-15239" positionY="-6228" width="128" height="133"/>
         <element name="TravelItineraryEntity" positionX="-15138" positionY="-6417" width="128" height="135"/>
         <element name="TripEntity" positionX="-15527" positionY="-6666" width="128" height="388"/>
-        <element name="UserEntity" positionX="-15858" positionY="-6876" width="128" height="105"/>
+        <element name="UserEntity" positionX="-15930" positionY="-6831" width="128" height="103"/>
         <element name="WBSEntity" positionX="-16301" positionY="-6354" width="128" height="88"/>
     </elements>
 </model>

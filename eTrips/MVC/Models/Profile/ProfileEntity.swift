@@ -9,6 +9,7 @@ public final class ProfileEntity: ManagedObject {
 	@NSManaged public private(set) var username: String?
 	@NSManaged public private(set) var office: String?
 	@NSManaged public private(set) var jobTitle: String?
+    @NSManaged public private(set) var businessArea: Int64
 	
 	var fullName: String {
 		return "\(firstName) \(lastName)"
@@ -51,6 +52,11 @@ public final class ProfileEntity: ManagedObject {
 		if let jobTitle = object.jobTitle {
 			profileEntity.jobTitle = jobTitle
 		}
+        
+        // Business Area.
+        if let businessArea = object.businessArea {
+            profileEntity.businessArea = Int64(businessArea)
+        }
 
 		return profileEntity
 	}

@@ -130,7 +130,7 @@ class TripDetailsViewController: UIViewController {
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
 		guard let identifier = segue.identifier, let segueIdentifier = SegueIdentifier(rawValue: identifier) else {
-			fatalError("Invalid segue identifier \(segue.identifier)")
+			fatalError("Invalid segue identifier \(String(describing: segue.identifier))")
 		}
 
 		switch segueIdentifier {

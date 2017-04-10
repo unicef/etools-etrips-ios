@@ -11,7 +11,6 @@ protocol RowIndexable {
 }
 
 extension RowIndexable where Self: RawRepresentable, Self.RawValue == Int {
-    
     func indexPath() -> IndexPath {
         return IndexPath(row: self.rawValue, section: 0)
     }

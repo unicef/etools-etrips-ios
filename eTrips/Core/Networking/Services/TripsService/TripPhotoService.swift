@@ -21,8 +21,8 @@ class TripPhotoService {
 				}
 			case let .failure(error):
 				switch error {
-				case .underlying(let nsError as NSError?):
-					completion(false, NetworkError(title: "Error", detail: nsError?.localizedDescription))
+				case .underlying(let nsError):
+					completion(false, NetworkError(title: "Error", detail: nsError.localizedDescription))
 				default:
 					completion(false, nil)
 				}

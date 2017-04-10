@@ -14,15 +14,17 @@ class TripReportService {
 					completion(true, nil)
 				case 400:
 					do {
-						if let json = try response.mapJSON() as? NSDictionary {
-							if let messages = json.allValues.first as? [String] {
-								completion(false, NetworkError(title: "Error", detail: messages.first))
-							} else {
-								completion(false, nil)
-							}
-						} else {
+						guard let json = try response.mapJSON() as? NSDictionary else {
 							completion(false, nil)
+							return
 						}
+
+						guard let messages = json.allValues.first as? [String] else {
+							completion(false, nil)
+							return
+						}
+
+						completion(false, NetworkError(title: "Error", detail: messages.first))
 					} catch {
 						completion(false, nil)
 					}
@@ -33,8 +35,8 @@ class TripReportService {
 				}
 			case let .failure(error):
 				switch error {
-				case .underlying(let nsError as NSError?):
-					completion(false, NetworkError(title: "Error", detail: nsError?.localizedDescription))
+				case .underlying(let nsError):
+					completion(false, NetworkError(title: "Error", detail: nsError.localizedDescription))
 				default:
 					completion(false, nil)
 				}

@@ -9,6 +9,7 @@ public class Profile: Mappable {
 	var username: String?
 	var office: String?
 	var jobTitle: String?
+    var businessArea: Int?
 
 	public required init?(map: Map) {
 
@@ -22,5 +23,6 @@ public class Profile: Mappable {
 		username <- map["username"]
 		office <- map["profile.office"]
 		jobTitle <- map["profile.job_title"]
+        businessArea <- map["t2f.business_area"]
 	}
 }

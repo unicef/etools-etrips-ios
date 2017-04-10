@@ -4,7 +4,6 @@ import SwiftPaginator
 import UIScrollView_InfiniteScroll
 
 class TripsBaseTableViewController: UITableViewController {
-
 	/// Static Data.
 	var staticDataEntity: StaticDataEntity?
 	var staticDataT2FEntity: StaticDataT2FEntity?
@@ -17,6 +16,9 @@ class TripsBaseTableViewController: UITableViewController {
 	typealias Data = FetchedResultsDataProvider<TripsBaseTableViewController>
 	var dataSource: TableViewDataSource<TripsBaseTableViewController, Data, TripTableViewCell>!
 
+	/// Context.
+	var managedObjectContext = CoreDataStack.shared.managedObjectContext
+
 	// MARK: - Lifecycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -24,13 +26,13 @@ class TripsBaseTableViewController: UITableViewController {
 		// Fetch Static Data 1.
 		let staticDataRequest = NSFetchRequest<NSFetchRequestResult>(entityName: StaticDataEntity.entityName)
 		let staticDataResult =
-			try! CoreDataStack.shared.managedObjectContext.fetch(staticDataRequest) as! [StaticDataEntity]
+			try! managedObjectContext.fetch(staticDataRequest) as! [StaticDataEntity]
 		staticDataEntity = staticDataResult.first
 
 		// Fetch Static Data 2.
 		let staticDataT2FRequest = NSFetchRequest<NSFetchRequestResult>(entityName: StaticDataT2FEntity.entityName)
 		let staticDataT2FResult =
-			try! CoreDataStack.shared.managedObjectContext.fetch(staticDataT2FRequest) as! [StaticDataT2FEntity]
+			try! managedObjectContext.fetch(staticDataT2FRequest) as! [StaticDataT2FEntity]
 		staticDataT2FEntity = staticDataT2FResult.first
 
 		setupRefreshControl()
@@ -48,7 +50,7 @@ class TripsBaseTableViewController: UITableViewController {
 	}
 
 	// MARK: - Methods
-	func pullToRefresh(_: UIRefreshControl) {
+	func handleRefresh(_: UIRefreshControl) {
 		tripsPaginator.fetchFirstPage()
 	}
 
@@ -153,7 +155,7 @@ class TripsBaseTableViewController: UITableViewController {
 
 		let fetchedResultsController =
 			NSFetchedResultsController(fetchRequest: tripsFetchRequest,
-			                           managedObjectContext: CoreDataStack.shared.managedObjectContext,
+			                           managedObjectContext: managedObjectContext,
 			                           sectionNameKeyPath: nil,
 			                           cacheName: nil)
 
@@ -171,7 +173,7 @@ class TripsBaseTableViewController: UITableViewController {
 		}
 
 		refreshControl.addTarget(self,
-		                         action: #selector(TripsBaseTableViewController.pullToRefresh(_:)),
+		                         action: #selector(TripsBaseTableViewController.handleRefresh(_:)),
 		                         for: UIControlEvents.valueChanged)
 
 		tableView.setContentOffset(CGPoint(x: 0, y: -refreshControl.frame.size.height), animated: true)

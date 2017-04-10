@@ -4,13 +4,14 @@ import UIScrollView_InfiniteScroll
 import SwiftPaginator
 
 class ActionPointsTableViewController: UITableViewController {
-	
 	var actionPointsService: ActionPointsService = ActionPointsService()
 	var actionPointsPaginator: Paginator<ActionPointEntity>?
 	var tripID: Int64?
 	
 	fileprivate typealias Data = FetchedResultsDataProvider<ActionPointsTableViewController>
 	fileprivate var dataSource: TableViewDataSource<ActionPointsTableViewController, Data, ActionPointTableViewCell>!
+	
+	var managedObjectContext = CoreDataStack.shared.managedObjectContext
 	
 	// MARK: - Lifecycle
 	override func awakeFromNib() {
@@ -182,7 +183,7 @@ class ActionPointsTableViewController: UITableViewController {
 		
 		let fetchedResultsController =
 			NSFetchedResultsController(fetchRequest: actionPointsFetchRequest,
-			                           managedObjectContext: CoreDataStack.shared.managedObjectContext,
+			                           managedObjectContext: self.managedObjectContext,
 			                           sectionNameKeyPath: nil,
 			                           cacheName: nil)
 		

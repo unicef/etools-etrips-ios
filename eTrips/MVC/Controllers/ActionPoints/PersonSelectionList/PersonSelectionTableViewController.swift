@@ -1,95 +1,115 @@
 import UIKit
+import CoreData
 
 protocol PersonSelectionTableViewControllerDelegate: class {
     func didSelectPerson(_ person: UserEntity)
 }
 
 class PersonSelectionTableViewController: UITableViewController {
-    
+    /// Services.
     var usersService: UsersService = UsersService()
-    
-    var selectedPersonId: Int64? {
-        didSet {
-            if let index = usersInfo.find({ $0.userID == oldValue }) {
-                tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-            }
-        }
-    }
-    
-    var usersInfo = [UserEntity]() {
-        didSet {
-            tableView.reloadData()
-        }
-    }
-    
-    weak var delegate: PersonSelectionTableViewControllerDelegate?
 
-	// MARK: - Lifecycle
+    /// Data.
+    typealias Data = FetchedResultsDataProvider<PersonSelectionTableViewController>
+    var dataSource: TableViewDataSource<PersonSelectionTableViewController, Data, PersonTableViewCell>!
+
+    /// Context.
+    var managedObjectContext = CoreDataStack.shared.managedObjectContext
+
+    /// Delegate.
+    weak var delegate: PersonSelectionTableViewControllerDelegate?
+    
+    /// Search Controller.
+    let searchController = UISearchController(searchResultsController: nil)
+
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-		
-        loadUsersInfo()
 
-        refreshControl?.addTarget(self, action: #selector(handleRefresh(refreshControl:)), for: .valueChanged)
-    }
-    func handleRefresh(refreshControl: UIRefreshControl) {
+        // Setup.
+        setupSearchController()
+        setupTableViewDataSource()
+        setupRefreshControl()
         
-        usersService.downloadUsers { _ in
-            self.loadUsersInfo()
-            refreshControl.endRefreshing()
+        if dataSource.isEmpty {
+            downloadUsers()
         }
     }
-}
 
-// MARK: - UITableViewDataSource
-extension PersonSelectionTableViewController {
-   
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return usersInfo.count
+    // MARK: - Methods
+    func setupRefreshControl() {
+        refreshControl = UIRefreshControl()
+
+        guard let refreshControl = refreshControl else {
+            return
+        }
+
+        refreshControl.addTarget(self,
+                                 action: #selector(PersonSelectionTableViewController.handleRefresh(refreshControl:)),
+                                 for: UIControlEvents.valueChanged)
+
+        if dataSource.isEmpty {
+            tableView.setContentOffset(CGPoint(x: 0, y: -refreshControl.frame.size.height), animated: true)
+            refreshControl.beginRefreshing()
+        }
+    }
+
+    func setupTableViewDataSource() {
+        // Trips Fetch Request.
+        let usersFetchRequest = UserEntity.sortedFetchRequest
+        usersFetchRequest.fetchBatchSize = 20
+        usersFetchRequest.returnsObjectsAsFaults = false
+        
+        if searchController.isActive && searchController.searchBar.text != "" {
+            let searchString = searchController.searchBar.text!
+            let predicate = NSPredicate(format: "name CONTAINS[cd] %@", searchString)
+            usersFetchRequest.predicate = predicate
+        }
+        
+        let fetchedResultsController =
+            NSFetchedResultsController(fetchRequest: usersFetchRequest,
+                                       managedObjectContext: managedObjectContext,
+                                       sectionNameKeyPath: nil,
+                                       cacheName: nil)
+        
+        let dataProvider = FetchedResultsDataProvider(fetchedResultsController: fetchedResultsController,
+                                                      delegate: self)
+        
+        dataSource = TableViewDataSource(tableView: tableView, dataProvider: dataProvider, delegate: self)
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "UsertCellID", for: indexPath)
-        
-        let user = usersInfo[indexPath.row]
-        cell.textLabel?.text = "\(user.fullName)"
-        
-        if let _ = selectedPersonId {
-            cell.accessoryType = user.userID == selectedPersonId! ? .checkmark : .none
+    func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
+    }
+    
+    func handleRefresh(refreshControl: UIRefreshControl) {
+        downloadUsers()
+    }
+    
+    func downloadUsers() {
+        usersService.downloadUsers { _ in
+            self.refreshControl?.endRefreshing()
         }
-        
-        return cell
     }
 }
 
 // MARK: - UITableViewDelegate
 extension PersonSelectionTableViewController {
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) {
-            cell.accessoryType = .checkmark
-            selectedPersonId = usersInfo[indexPath.row].userID
-			
-			        if let index = tableView.indexPathForSelectedRow {
-            delegate?.didSelectPerson(usersInfo[index.row])
-        }
-			
-			_ = navigationController?.popViewController(animated: true)
-			
-        }
+    override func tableView(_: UITableView, didSelectRowAt _: IndexPath) {
+
+        guard let user = dataSource.selectedObject else { fatalError("Showing detail, but no selected row?") }
+        delegate?.didSelectPerson(user)
+
+        _ = navigationController?.popViewController(animated: true)
     }
-    
+
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) {
             cell.accessoryType = .none
         }
-    }
-}
-
-// MARK: Loading users info from DB
-extension PersonSelectionTableViewController {
-    func loadUsersInfo() {
-        let context = CoreDataStack.shared.managedObjectContext
-        usersInfo = UserEntity.fetch(in: context).sorted { $0.fullName < $1.fullName }
     }
 }
 
@@ -98,5 +118,31 @@ extension PersonSelectionTableViewController: ViewControllerFromStoryboard {
     static func viewControllerFromStoryboard<T: UIViewController>() -> T? {
         let storyboard = UIStoryboard(name: Constants.Storyboard.ActionPoints, bundle: nil)
         return storyboard.instantiateViewController(withIdentifier: String(describing: self)) as? T
+    }
+}
+
+// MARK: - DataProviderDelegate
+extension PersonSelectionTableViewController: DataProviderDelegate {
+    typealias Object = UserEntity
+
+    func dataProviderDidUpdate() {
+        refreshControl?.endRefreshing()
+        dataSource.processUpdates()
+    }
+}
+
+// MARK: - DataSourceDelegate
+extension PersonSelectionTableViewController: DataSourceDelegate {
+    func cellIdentifierForObject(object: UserEntity) -> String {
+        return String(describing: PersonTableViewCell.self)
+    }
+}
+
+// MARK: - UISearchResultsUpdating
+extension PersonSelectionTableViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        dataSource = nil
+        setupTableViewDataSource()
+        tableView.reloadData()
     }
 }

@@ -8,6 +8,8 @@ typealias ActionPointsAddCompletionHandler = (Bool, NetworkError?) -> Void
 
 /// Class responsible for loading action points data and storing it to the Core Data.
 class ActionPointsService {
+	var managedObjectContext = CoreDataStack.shared.managedObjectContext
+
 	func downloadActionPoints(userID: Int,
 	                          page: Int,
 	                          pageSize: Int,
@@ -33,43 +35,45 @@ class ActionPointsService {
 						}
 						
 						if page == 1 {
-							ActionPointEntity.deleteAll(in: CoreDataStack.shared.managedObjectContext)
+							ActionPointEntity.deleteAll(in: self.managedObjectContext)
 						}
 						
-						if !actionPoints.isEmpty {
-							var pointsEntities = [ActionPointEntity]()
-							
-							// Sync adding.
-							// Add new action points to the database.
-							for actionPoint in actionPoints {
-								let pointEntity =
-									ActionPointEntity.findAndUpdateOrCreate(in: CoreDataStack.shared.managedObjectContext,
-									                                        object: actionPoint)
-								pointsEntities.append(pointEntity)
-							}
-							
-							CoreDataStack.shared.saveContext()
-							
+						guard !actionPoints.isEmpty else {
 							completion(true, feed.totalCount, nil)
-							
-						} else {
-							completion(true, feed.totalCount, nil)
+							return
 						}
 						
+						var pointsEntities = [ActionPointEntity]()
+						
+						// Sync adding.
+						// Add new action points to the database.
+						for actionPoint in actionPoints {
+							let pointEntity =
+								ActionPointEntity.findAndUpdateOrCreate(in: self.managedObjectContext,
+																		object: actionPoint)
+							pointsEntities.append(pointEntity)
+						}
+						
+						CoreDataStack.shared.saveContext()
+						
+						completion(true, feed.totalCount, nil)
+
 					} catch {
 						completion(false, nil, nil)
 					}
 				case 400:
 					do {
-						if let json = try response.mapJSON() as? NSDictionary {
-							if let messages = json.allValues.first as? [String] {
-								completion(false, nil, NetworkError(title: "Error", detail: messages.first))
-							} else {
-								completion(false, nil, nil)
-							}
-						} else {
+						guard let json = try response.mapJSON() as? NSDictionary else {
 							completion(false, nil, nil)
+							return
 						}
+
+						guard let messages = json.allValues.first as? [String] else {
+							completion(false, nil, nil)
+							return
+						}
+
+						completion(false, nil, NetworkError(title: "Error", detail: messages.first))
 					} catch {
 						completion(false, nil, nil)
 					}
@@ -80,8 +84,8 @@ class ActionPointsService {
 				}
 			case let .failure(error):
 				switch error {
-				case .underlying(let nsError as NSError?):
-					completion(false, nil, NetworkError(title: "Error", detail: nsError?.localizedDescription))
+				case .underlying(let nsError):
+					completion(false, nil, NetworkError(title: "Error", detail: nsError.localizedDescription))
 				default:
 					completion(false, nil, nil)
 				}
@@ -105,7 +109,7 @@ class ActionPointsService {
 							completion(false, nil)
 							return
 						}
-						_ = ActionPointEntity.findAndUpdateOrCreate(in: CoreDataStack.shared.managedObjectContext,
+						_ = ActionPointEntity.findAndUpdateOrCreate(in: self.managedObjectContext,
 						                                            object: point)
 						
 						completion(true, nil)
@@ -123,8 +127,8 @@ class ActionPointsService {
 				
 			case let .failure(error):
 				switch error {
-				case .underlying(let nsError as NSError?):
-					completion(false, NetworkError(title: "Error", detail: nsError?.localizedDescription))
+				case .underlying(let nsError):
+					completion(false, NetworkError(title: "Error", detail: nsError.localizedDescription))
 				default:
 					completion(false, nil)
 				}
@@ -150,11 +154,9 @@ class ActionPointsService {
 							return
 						}
 						
-						let context = CoreDataStack.shared.managedObjectContext
+						ActionPointEntity.deleteAll(forTripID: tripID, in: self.managedObjectContext)
 						
-						ActionPointEntity.deleteAll(forTripID: tripID, in: context)
-						
-						_ = TripEntity.findAndUpdateOrCreate(in: context,
+						_ = TripEntity.findAndUpdateOrCreate(in: self.managedObjectContext,
 						                                     object: trip,
 						                                     type: nil)
 						
@@ -176,8 +178,8 @@ class ActionPointsService {
 				}
 			case let .failure(error):
 				switch error {
-				case .underlying(let nsError as NSError?):
-					completion(false, NetworkError(title: "Error", detail: nsError?.localizedDescription))
+				case .underlying(let nsError):
+					completion(false, NetworkError(title: "Error", detail: nsError.localizedDescription))
 				default:
 					completion(false, nil)
 				}

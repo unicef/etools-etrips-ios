@@ -90,7 +90,6 @@ class LoginSOAPService {
 	}
 	
 	func urlBase64Decode(_ input: String) -> String? {
-		
 		var output = input.replacingOccurrences(of: "-", with: "+")
 		output = output.replacingOccurrences(of: "_", with: "/")
 		switch output.characters.count % 4 {

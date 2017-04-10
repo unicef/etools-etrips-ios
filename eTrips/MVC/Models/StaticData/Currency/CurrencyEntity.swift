@@ -34,6 +34,22 @@ public final class CurrencyEntity: ManagedObject {
 		
 		return currencyEntity
 	}
+    
+    public static func deleteAll(in context: NSManagedObjectContext) {
+        let currenciesFetchRequest = self.sortedFetchRequest
+        let fetchedCurrencies = try! context.fetch(currenciesFetchRequest) as! [CurrencyEntity]
+        
+        for currencyEntity in fetchedCurrencies {
+            context.delete(currencyEntity)
+        }
+    }
+    
+    public static func findCurrency(with id: Int64, in context: NSManagedObjectContext) -> CurrencyEntity? {
+        let currenciesFetchRequest = self.sortedFetchRequest
+        let fetchedCurrencies = try! context.fetch(currenciesFetchRequest) as? [CurrencyEntity]
+        let filteredCurrencies = fetchedCurrencies?.filter { $0.currencyID == id }
+        return filteredCurrencies?.first
+    }
 }
 
 // MARK: - ManagedObjectType
@@ -41,4 +57,8 @@ extension CurrencyEntity: ManagedObjectType {
 	public static var entityName: String {
 		return "CurrencyEntity"
 	}
+    
+    public static var defaultSortDescriptors: [NSSortDescriptor] {
+        return [NSSortDescriptor(key: "name", ascending: true)]
+    }
 }

@@ -18,7 +18,6 @@ class FetchedResultsDataProvider<Delegate: DataProviderDelegate>
 	}
 	
 	// MARK: - DataProvider
-	// TODO: Refactor according to Swift API Design Guidelines
 	func numberOfItemsInSection(section: Int) -> Int {
 		guard let section = fetchedResultsController.sections?[section] else { return 0 }
 		return section.numberOfObjects

@@ -14,7 +14,7 @@ public final class LocalFileEntity: ManagedObject {
 		
 		let predicate = NSPredicate(format: "fileID == %@", String(describing: fileID))
 		
-		let localFileEntity = findOrCreate(in: CoreDataStack.shared.managedObjectContext, with: predicate) {
+		let localFileEntity = findOrCreate(in: context, with: predicate) {
 			$0.tripID = tripID
 			$0.fileID = Int64(fileID)
 			$0.fileURL = fileURL

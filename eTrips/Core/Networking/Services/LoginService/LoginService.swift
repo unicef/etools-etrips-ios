@@ -16,28 +16,33 @@ class LoginService {
 				switch statusCode {
 				case 200...299:
 					do {
-						if let json = try response.mapJSON() as? NSDictionary {
-							if let token = json["token"] as? String {
-								UserManager.shared.token = token
-								completion(true, nil)
-							}
-						} else {
+						guard let json = try response.mapJSON() as? NSDictionary else {
 							completion(false, nil)
+							return
 						}
+						
+						guard let token = json["token"] as? String else {
+							completion(false, nil)
+							return
+						}
+						UserManager.shared.token = token
+						completion(true, nil)
 					} catch {
 						completion(false, nil)
 					}
 				default:
 					do {
-						if let json = try response.mapJSON() as? NSDictionary {
-							if let messages = json.allValues.first as? [String] {
-								completion(false, NetworkError(title: "Error", detail: messages.first))
-							} else {
-								completion(false, nil)
-							}
-						} else {
+						guard let json = try response.mapJSON() as? NSDictionary else {
 							completion(false, nil)
+							return
 						}
+						
+						guard let messages = json.allValues.first as? [String] else {
+							completion(false, nil)
+							return
+						}
+						
+						completion(false, NetworkError(title: "Error", detail: messages.first))
 					} catch {
 						completion(false, nil)
 					}
@@ -45,8 +50,8 @@ class LoginService {
 				
 			case let .failure(error):
 				switch error {
-				case .underlying(let nsError as NSError?):
-					completion(false, NetworkError(title: "Error", detail: nsError?.localizedDescription))
+				case .underlying(let nsError):
+					completion(false, NetworkError(title: "Error", detail: nsError.localizedDescription))
 				default:
 					completion(false, nil)
 				}

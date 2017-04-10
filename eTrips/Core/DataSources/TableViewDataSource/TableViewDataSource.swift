@@ -17,6 +17,10 @@ class TableViewDataSource<Delegate: DataSourceDelegate, Data: DataProvider, Cell
 		tableView.dataSource = self
 		tableView.reloadData()
 	}
+    
+    public var isEmpty: Bool {
+        return dataProvider.numberOfItemsInSection(section: 0) == 0
+    }
 	
 	var selectedObject: Data.Object? {
         guard let indexPath = tableView.indexPathForSelectedRow else { return nil }

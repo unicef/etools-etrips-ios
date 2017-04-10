@@ -88,7 +88,6 @@ public final class ActionPointEntity: ManagedObject {
 	}
 	
 	public static func deleteAll(in context: NSManagedObjectContext) {
-		
 		let fetchedActionPoints = try! context.fetch(self.sortedFetchRequest) as! [ActionPointEntity]
 		
 		for pointEntity in fetchedActionPoints {
@@ -99,7 +98,6 @@ public final class ActionPointEntity: ManagedObject {
 	}
 	
 	public static func deleteAll(forTripID tripID: Int, in context: NSManagedObjectContext) {
-		
 		let fetchRequest = self.sortedFetchRequest
 		fetchRequest.predicate = NSPredicate(format: "tripID == %d", tripID)
 		
@@ -141,7 +139,7 @@ public final class ActionPointEntity: ManagedObject {
 		let dueDateString = DateFormatter.iso8601DateFormatter.string(from: self.dueDate as Date)
 		result["due_date"] = dueDateString
 		
-		if let date = completedAt as? Date {
+		if let date = completedAt as Date? {
 			result["completed_at"] = DateFormatter.iso8601DateFormatter.string(from: date)
 		} else {
 			result["completed_at"] = NSNull()

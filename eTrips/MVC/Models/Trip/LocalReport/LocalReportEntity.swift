@@ -12,7 +12,7 @@ public final class LocalReportEntity: ManagedObject {
 		
 		let predicate = NSPredicate(format: "tripID == %@", String(describing: tripID))
 		
-		let localReportEntity = findOrCreate(in: CoreDataStack.shared.managedObjectContext, with: predicate) {
+		let localReportEntity = findOrCreate(in: context, with: predicate) {
 			$0.tripID = tripID
 		}
 		

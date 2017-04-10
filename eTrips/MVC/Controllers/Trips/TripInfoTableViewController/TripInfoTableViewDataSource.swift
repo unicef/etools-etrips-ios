@@ -7,7 +7,8 @@ class TripInfoTableViewDataSource: NSObject {
 	var transitionService = TransitionService()
 
 	fileprivate weak var controller: TripInfoTableViewController?
-
+    
+    var managedObjectContex = CoreDataStack.shared.managedObjectContext
 	var currency: CurrencyEntity?
 
 	fileprivate enum SectionType {
@@ -141,7 +142,7 @@ class TripInfoTableViewDataSource: NSObject {
 	}
 
 	func updateCurrency() {
-		currency = staticDataEntity.findCurrency(with: tripEntity.currencyID)
+        currency = CurrencyEntity.findCurrency(with: tripEntity.currencyID, in: managedObjectContex)
 	}
 }
 

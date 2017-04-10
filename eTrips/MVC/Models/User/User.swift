@@ -2,20 +2,18 @@ import Foundation
 import ObjectMapper
 
 public class User: Mappable {
-	var userID: Int?
-	var fullName: String?
-	var username: String?
-	var email: String?
+  var userID: Int?
+  var firstName: String?
+  var lastName: String?
+  var name: String?
 
-	public required init?(map: Map) {
+  public required init?(map: Map) {
+  }
 
-	}
-
-	public func mapping(map: Map) {
-		userID <- (map["user_id"], TransformOf<Int, String>(fromJSON: { $0 == nil ? nil : Int($0!) },
-		                                                   toJSON: { $0.map { String($0) } }))
-		fullName <- map["full_name"]
-		username <- map["username"]
-		email <- map["email"]
-	}
+  public func mapping(map: Map) {
+    userID <- map["id"]
+    firstName <- map["first_name"]
+    lastName <- map["last_name"]
+    name <- map["name"]
+  }
 }

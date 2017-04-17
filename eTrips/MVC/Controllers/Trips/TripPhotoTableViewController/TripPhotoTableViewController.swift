@@ -45,6 +45,7 @@ class TripPhotoTableViewController: UITableViewController {
 	}
 	fileprivate var sections = [Section]()
 	
+    /// Core Data Context.
 	var managedObjectContext = CoreDataStack.shared.managedObjectContext
 
 	// MARK: - Lifecycle

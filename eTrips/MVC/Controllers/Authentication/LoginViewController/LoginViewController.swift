@@ -190,9 +190,15 @@ class LoginViewController: UIViewController {
             if profileSuccess && staticDataSuccess && staticDataT2FSuccess && currenciesSucess {
                 self.transitionToTabBar()
             } else {
+                // Clean token & data.
+                UserManager.shared.token = nil
+                CoreDataStack.shared.cleanData()
+                
+                // Stop spinner.
                 self.activityIndicator.stopAnimating()
                 self.signInButton.isUserInteractionEnabled = true
-
+                
+                // Show alert.
                 let alert = UIAlertController(title: "Error",
                                               message: "Cannot load service data.",
                                               preferredStyle: .alert)

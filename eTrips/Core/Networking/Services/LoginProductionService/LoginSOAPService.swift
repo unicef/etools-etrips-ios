@@ -18,18 +18,18 @@ class LoginSOAPService {
 		request.addValue("application/soap+xml; charset=utf-8", forHTTPHeaderField: "Content-Type")
 		
 		let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            guard error == nil else {
+				DispatchQueue.main.async {
+					completion(false, NetworkError(title: "Error", detail: error?.localizedDescription))
+				}
+				return
+			}
+			
 			guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
 				DispatchQueue.main.async {
 					completion(false,
 					           NetworkError(title: "Error",
 					                        detail: "The security token could not be authenticated or authorized."))
-				}
-				return
-			}
-			
-			guard error == nil else {
-				DispatchQueue.main.async {
-					completion(false, NetworkError(title: "Error", detail: error?.localizedDescription))
 				}
 				return
 			}

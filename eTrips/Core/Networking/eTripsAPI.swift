@@ -92,7 +92,8 @@ extension eTripsAPI: TargetType {
 
     var method: Moya.Method {
         switch self {
-        case .users, .trips, .trip, .profile, .staticData, .staticDataT2F, .actionPoints, .wbsGrantsFunds, .currencies:
+        case .users, .trips, .trip, .profile, .staticData,
+             .staticDataT2F, .actionPoints, .wbsGrantsFunds, .currencies:
             return .get
         case .tripTextReport, .transition, .updateActionPoint, .addActionPoint:
             return .patch

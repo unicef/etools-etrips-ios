@@ -1,5 +1,6 @@
 import UIKit
 import CoreData
+import Moya
 
 protocol PersonSelectionTableViewControllerDelegate: class {
     func didSelectPerson(_ person: UserEntity)
@@ -13,14 +14,17 @@ class PersonSelectionTableViewController: UITableViewController {
     typealias Data = FetchedResultsDataProvider<PersonSelectionTableViewController>
     var dataSource: TableViewDataSource<PersonSelectionTableViewController, Data, PersonTableViewCell>!
 
-    /// Context.
+    /// Core Data Context.
     var managedObjectContext = CoreDataStack.shared.managedObjectContext
 
     /// Delegate.
     weak var delegate: PersonSelectionTableViewControllerDelegate?
-    
+
     /// Search Controller.
     let searchController = UISearchController(searchResultsController: nil)
+
+    /// Token for cancelling the request.
+    var cancellableToken: Cancellable?
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -30,9 +34,17 @@ class PersonSelectionTableViewController: UITableViewController {
         setupSearchController()
         setupTableViewDataSource()
         setupRefreshControl()
-        
+
         if dataSource.isEmpty {
             downloadUsers()
+        }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        if let cancellableToken = cancellableToken {
+            cancellableToken.cancel()
         }
     }
 
@@ -55,44 +67,73 @@ class PersonSelectionTableViewController: UITableViewController {
     }
 
     func setupTableViewDataSource() {
-        // Trips Fetch Request.
         let usersFetchRequest = UserEntity.sortedFetchRequest
         usersFetchRequest.fetchBatchSize = 20
         usersFetchRequest.returnsObjectsAsFaults = false
-        
+
         if searchController.isActive && searchController.searchBar.text != "" {
             let searchString = searchController.searchBar.text!
             let predicate = NSPredicate(format: "name CONTAINS[cd] %@", searchString)
             usersFetchRequest.predicate = predicate
         }
-        
+
         let fetchedResultsController =
             NSFetchedResultsController(fetchRequest: usersFetchRequest,
                                        managedObjectContext: managedObjectContext,
                                        sectionNameKeyPath: nil,
                                        cacheName: nil)
-        
+
         let dataProvider = FetchedResultsDataProvider(fetchedResultsController: fetchedResultsController,
                                                       delegate: self)
-        
-        dataSource = TableViewDataSource(tableView: tableView, dataProvider: dataProvider, delegate: self)
+
+        dataSource = TableViewDataSource(tableView: tableView,
+                                         dataProvider: dataProvider,
+                                         delegate: self,
+                                         isSearch: searchController.isActive)
     }
-    
+
     func setupSearchController() {
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
     }
-    
-    func handleRefresh(refreshControl: UIRefreshControl) {
+
+    func handleRefresh(refreshControl _: UIRefreshControl) {
         downloadUsers()
     }
-    
+
     func downloadUsers() {
-        usersService.downloadUsers { _ in
-            self.refreshControl?.endRefreshing()
+
+        // Disable search when loading users.
+        searchController.searchBar.isUserInteractionEnabled = false
+
+        cancellableToken = usersService.downloadUsers { _, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    self.refreshControl?.endRefreshing()
+                    let alert = UIAlertController(title: error.title,
+                                                  message: error.detail,
+                                                  preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK",
+                                                 style: .cancel,
+                                                 handler: nil)
+
+                    alert.addAction(okAction)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                } else {
+                    self.refreshControl?.endRefreshing()
+                    self.searchController.searchBar.isUserInteractionEnabled = true
+                    self.updateUI()
+                }
+            }
         }
+    }
+
+    private func updateUI() {
+        setupTableViewDataSource()
     }
 }
 
@@ -143,6 +184,15 @@ extension PersonSelectionTableViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         dataSource = nil
         setupTableViewDataSource()
+
+        // Handle situation with refresh controll when search is active.
+        if searchController.isActive {
+            refreshControl?.endRefreshing()
+            refreshControl = nil
+        } else {
+            setupRefreshControl()
+        }
+
         tableView.reloadData()
     }
 }

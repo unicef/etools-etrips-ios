@@ -30,14 +30,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func applicationDidEnterBackground(_: UIApplication) {
-        CoreDataStack.shared.saveContext()
-    }
-
-    func applicationWillTerminate(_: UIApplication) {
-        CoreDataStack.shared.saveContext()
-    }
-
     // MARK: - Helpers
     func setupHockeySDK() {
         // Hockey SDK With Production identifier

@@ -146,7 +146,7 @@ class TripDetailsViewController: UIViewController {
 			}
 		case .tripActionPointsSegue:
 			if let actionPointsTableViewController = segue.destination as? ActionPointsTableViewController {
-				actionPointsTableViewController.tripID = tripEntity.tripID
+				actionPointsTableViewController.mode = .tripActionPoints(tripEntity.tripID)
 				actionPointsController = actionPointsTableViewController
 			}
 		}

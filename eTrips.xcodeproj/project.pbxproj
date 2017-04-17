@@ -82,7 +82,6 @@
 		8470629B1E4CBAA10067CBAD /* TripFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8470629A1E4CBAA10067CBAD /* TripFeed.swift */; };
 		847B1B3F1E2CFD99002BF64C /* TripTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847B1B3D1E2CFD99002BF64C /* TripTableViewCell.swift */; };
 		847B1B401E2CFD99002BF64C /* TripTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 847B1B3E1E2CFD99002BF64C /* TripTableViewCell.xib */; };
-		847CD8E91E2CC59300B16254 /* TripActionPointsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847CD8E81E2CC59300B16254 /* TripActionPointsTableViewController.swift */; };
 		847CD8EB1E2CC5A400B16254 /* TripInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847CD8EA1E2CC5A400B16254 /* TripInfoTableViewController.swift */; };
 		847CD8ED1E2CC5B100B16254 /* TripReportTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847CD8EC1E2CC5B100B16254 /* TripReportTableViewController.swift */; };
 		848493551E30A0220050409A /* eTripsModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 848493531E30A0220050409A /* eTripsModel.xcdatamodeld */; };
@@ -113,6 +112,7 @@
 		84B114FE1E71814B002DB686 /* DefaultAlamofireManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B114FD1E71814B002DB686 /* DefaultAlamofireManager.swift */; };
 		84B2383B1E5ADFA000830C11 /* TripsBaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B2383A1E5ADFA000830C11 /* TripsBaseTableViewController.swift */; };
 		84B2804B1E276E00000E911B /* Authentication.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84B280491E276E00000E911B /* Authentication.storyboard */; };
+		84B39F7C1E9CFB3200E5A4F9 /* Stopwatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B39F7B1E9CFB3200E5A4F9 /* Stopwatch.swift */; };
 		84B7EA201E3374CA00164DBE /* ManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B7EA1F1E3374CA00164DBE /* ManagedObject.swift */; };
 		84B7EA221E33853E00164DBE /* ManagedObjectContexSettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B7EA211E33853E00164DBE /* ManagedObjectContexSettable.swift */; };
 		84B7EA251E338A4100164DBE /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B7EA241E338A4100164DBE /* UIImage.swift */; };
@@ -144,6 +144,7 @@
 		84F8A8951E532A6C00EB66A7 /* CostSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F8A8941E532A6C00EB66A7 /* CostSummary.swift */; };
 		84F8A8971E532B6E00EB66A7 /* CostSummaryEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F8A8961E532B6E00EB66A7 /* CostSummaryEntity.swift */; };
 		84F8A89A1E53512F00EB66A7 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F8A8991E53512F00EB66A7 /* Double.swift */; };
+		84F9081E1E9D50CF004DA115 /* UsersImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F9081D1E9D50CF004DA115 /* UsersImport.swift */; };
 		AAEEFD584C087FD49F762F2A /* Pods_eTrips.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD2473747BC4FFEC557CEDBC /* Pods_eTrips.framework */; };
 /* End PBXBuildFile section */
 
@@ -229,7 +230,6 @@
 		8470629A1E4CBAA10067CBAD /* TripFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripFeed.swift; sourceTree = "<group>"; };
 		847B1B3D1E2CFD99002BF64C /* TripTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripTableViewCell.swift; sourceTree = "<group>"; };
 		847B1B3E1E2CFD99002BF64C /* TripTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TripTableViewCell.xib; sourceTree = "<group>"; };
-		847CD8E81E2CC59300B16254 /* TripActionPointsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripActionPointsTableViewController.swift; sourceTree = "<group>"; };
 		847CD8EA1E2CC5A400B16254 /* TripInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripInfoTableViewController.swift; sourceTree = "<group>"; };
 		847CD8EC1E2CC5B100B16254 /* TripReportTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripReportTableViewController.swift; sourceTree = "<group>"; };
 		848493541E30A0220050409A /* eTripsModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = eTripsModel.xcdatamodel; sourceTree = "<group>"; };
@@ -260,6 +260,7 @@
 		84B114FD1E71814B002DB686 /* DefaultAlamofireManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultAlamofireManager.swift; sourceTree = "<group>"; };
 		84B2383A1E5ADFA000830C11 /* TripsBaseTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripsBaseTableViewController.swift; sourceTree = "<group>"; };
 		84B2804A1E276E00000E911B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Authentication.storyboard; sourceTree = "<group>"; };
+		84B39F7B1E9CFB3200E5A4F9 /* Stopwatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stopwatch.swift; sourceTree = "<group>"; };
 		84B7EA1F1E3374CA00164DBE /* ManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedObject.swift; sourceTree = "<group>"; };
 		84B7EA211E33853E00164DBE /* ManagedObjectContexSettable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedObjectContexSettable.swift; sourceTree = "<group>"; };
 		84B7EA241E338A4100164DBE /* UIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
@@ -293,6 +294,7 @@
 		84F8A8941E532A6C00EB66A7 /* CostSummary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CostSummary.swift; sourceTree = "<group>"; };
 		84F8A8961E532B6E00EB66A7 /* CostSummaryEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CostSummaryEntity.swift; sourceTree = "<group>"; };
 		84F8A8991E53512F00EB66A7 /* Double.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
+		84F9081D1E9D50CF004DA115 /* UsersImport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsersImport.swift; sourceTree = "<group>"; };
 		AD2473747BC4FFEC557CEDBC /* Pods_eTrips.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_eTrips.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1D20C4BFB13FB8EF441A982 /* Pods-eTrips.production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eTrips.production.xcconfig"; path = "Pods/Target Support Files/Pods-eTrips/Pods-eTrips.production.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -555,6 +557,7 @@
 			isa = PBXGroup;
 			children = (
 				8447BED31E4EF44D009C72C5 /* UsersService.swift */,
+				84F9081D1E9D50CF004DA115 /* UsersImport.swift */,
 			);
 			path = UsersService;
 			sourceTree = "<group>";
@@ -579,6 +582,7 @@
 		844AC86B1E40DA290015D3DC /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				84B39F7B1E9CFB3200E5A4F9 /* Stopwatch.swift */,
 				844AC86C1E40DA390015D3DC /* Utilities.swift */,
 				3FD848331E54A60E008C8BB8 /* ArrayUtilities.swift */,
 			);
@@ -790,14 +794,6 @@
 			path = TripTableViewCell;
 			sourceTree = "<group>";
 		};
-		847CD8E51E2CC56300B16254 /* TripActionPointsTableViewController */ = {
-			isa = PBXGroup;
-			children = (
-				847CD8E81E2CC59300B16254 /* TripActionPointsTableViewController.swift */,
-			);
-			path = TripActionPointsTableViewController;
-			sourceTree = "<group>";
-		};
 		847CD8E61E2CC56300B16254 /* TripInfoTableViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -972,7 +968,6 @@
 				843374B11E296D81004DAC6C /* TripDetailsViewController */,
 				847CD8E61E2CC56300B16254 /* TripInfoTableViewController */,
 				847CD8E71E2CC56300B16254 /* TripReportTableViewController */,
-				847CD8E51E2CC56300B16254 /* TripActionPointsTableViewController */,
 				843A80C51E38AFF5006C13B3 /* TravelItineraryTableViewController */,
 				84F8A88B1E5300E100EB66A7 /* TravelActivitiesTableViewController */,
 				849422DB1E360B4F00ECB886 /* CostAssignmentTableViewController */,
@@ -1465,6 +1460,7 @@
 				8447BED41E4EF44D009C72C5 /* UsersService.swift in Sources */,
 				84AD582F1E68485C0002E627 /* Currency.swift in Sources */,
 				8494C0E31E41EA5A00DAAFC5 /* FileEntity.swift in Sources */,
+				84B39F7C1E9CFB3200E5A4F9 /* Stopwatch.swift in Sources */,
 				84C449D71E686CA100B94E58 /* CustomTextField.swift in Sources */,
 				84989EBD1E30F65800D8D57F /* ProfileEntity.swift in Sources */,
 				84F8A8951E532A6C00EB66A7 /* CostSummary.swift in Sources */,
@@ -1508,7 +1504,6 @@
 				8447BED91E4F02C6009C72C5 /* UserEntity.swift in Sources */,
 				3F16EE041E52FC8E0099A3FB /* ActionPointFeed.swift in Sources */,
 				8443F8FE1E2F75F2001196EF /* UserManager.swift in Sources */,
-				847CD8E91E2CC59300B16254 /* TripActionPointsTableViewController.swift in Sources */,
 				84F8A89A1E53512F00EB66A7 /* Double.swift in Sources */,
 				84207CA11E546393001B7039 /* TransitionService.swift in Sources */,
 				845664611E51B0A1006B8751 /* WBS.swift in Sources */,
@@ -1571,6 +1566,7 @@
 				84698A091E37477E0034617F /* DataProvider.swift in Sources */,
 				843374B01E2916AE004DAC6C /* ViewControllerFromStoryboard.swift in Sources */,
 				84B7EA251E338A4100164DBE /* UIImage.swift in Sources */,
+				84F9081E1E9D50CF004DA115 /* UsersImport.swift in Sources */,
 				84F8A8821E52F0FF00EB66A7 /* Partner.swift in Sources */,
 				843A80C71E38AFF5006C13B3 /* TravelIteneraryTableViewController.swift in Sources */,
 				8494C0DD1E41E64D00DAAFC5 /* TravelItinerary.swift in Sources */,

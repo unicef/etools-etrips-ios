@@ -1,41 +1,44 @@
 import Foundation
+import Moya
 
-typealias UsersServiceCompletionHandler = (Bool) -> Void
+typealias UsersServiceCompletionHandler = (Bool, NetworkError?) -> Void
 
 class UsersService {
+    /// Contex.
     var managedObjectContext = CoreDataStack.shared.managedObjectContext
+    
+    /// Import Operation Queue.
+    var importQueue = OperationQueue()
 
-    func downloadUsers(completion: @escaping UsersServiceCompletionHandler) {
-        eTripsAPIProvider.request(.users) { result in
+    func downloadUsers(completion: @escaping UsersServiceCompletionHandler) -> Cancellable {
+        let cancellableToken = eTripsAPIProvider.request(.users) { result in
             switch result {
             case let .success(response):
                 let statusCode = response.statusCode
 
                 switch statusCode {
                 case 200 ... 299:
-                    do {
-                        let parsedUsers: [User]? = try response.mapArray(User.self)
-
-                        guard let users = parsedUsers else {
-                            completion(false)
+                    let importOperation = UsersImport(with: response,
+                                                      context: self.managedObjectContext) { success in
+                        if success {
+                            completion(true, nil)
+                        } else {
+                            completion(false, nil)
                         }
-
-                        UserEntity.deleteAll(in: self.managedObjectContext)
-                        for user in users {
-                            _ = UserEntity.insert(into: self.managedObjectContext, object: user)
-                        }
-                        CoreDataStack.shared.saveContext()
-                        completion(true)
-                    } catch {
-                        completion(false)
                     }
+                    self.importQueue.addOperation(importOperation)
                 default:
-                    completion(false)
+                    completion(false, nil)
                 }
-
-            case .failure:
-                completion(false)
+            case let .failure(error):
+                switch error {
+                case .underlying(let nsError):
+                    completion(false, NetworkError(title: "Error", detail: nsError.localizedDescription))
+                default:
+                    completion(false, nil)
+                }
             }
         }
+        return cancellableToken
     }
 }
